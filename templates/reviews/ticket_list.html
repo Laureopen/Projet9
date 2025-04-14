@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Liste des Tickets</title>
+    <title>Créer un ticket</title>
 </head>
 <body>
-    <h1>Liste des Tickets</h1>
-    {% for ticket in tickets %}
-        <div>
-            <h2>{{ ticket.title }}</h2>
-            <p>{{ ticket.description }}</p>
-            <p><strong>Auteur :</strong> {{ ticket.user.username }}</p>
-            <p><em>Créé le :</em> {{ ticket.time_created }}</p>
-            <hr>
-        </div>
-    {% empty %}
-        <p>Aucun ticket pour le moment.</p>
-    {% endfor %}
+
+<div class="form-container">
+    <h1>Créer un ticket</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="id_title">Titre :</label>
+        {{ form.title }}
+
+        <label for="id_description">Description :</label>
+        {{ form.description }}
+
+        <label for="id_image">Image :</label>
+        {{ form.image }}
+
+        <button type="submit">Créer un ticket</button>
+    </form>
+</div>
+
 </body>
 </html>
