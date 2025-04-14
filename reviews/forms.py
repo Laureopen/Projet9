@@ -1,5 +1,6 @@
 from django import forms
-from .models import Ticket
+from .models import Ticket, Review
+
 
 class TicketForm(forms.ModelForm):
     class Meta:
@@ -11,3 +12,11 @@ class TicketForm(forms.ModelForm):
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['headline', 'rating', 'body']
+        widgets = {
+            'rating': forms.Select(choices=[(i, i) for i in range(6)]),
+        }
