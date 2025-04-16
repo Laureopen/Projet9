@@ -52,15 +52,6 @@ class UserFollows(models.Model):
 
 
 
-class Comment(models.Model):
-    """
-    Represents a comment on a review.
-    Each comment is linked to a review and user.
-    """
-    review = models.ForeignKey(Review, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    body = models.TextField(max_length=2048)
-    time_created = models.DateTimeField(auto_now_add=True)
 
 
 

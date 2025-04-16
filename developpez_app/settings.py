@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -122,3 +121,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Redirections liées à l'authentification
+LOGIN_URL = '/auth/login/'  # URL de connexion
+LOGIN_REDIRECT_URL = '/reviews/flux/'  # Page d'accueil après login
+LOGOUT_REDIRECT_URL = '/auth/login/'  # Page après déconnexion
+
