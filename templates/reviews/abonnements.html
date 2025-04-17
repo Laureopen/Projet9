@@ -1,25 +1,63 @@
-<!-- subscriptions.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abonnements</title>
+     <title>Abonnements</title>
 </head>
 <body>
-    <h1>Abonnements</h1>
-    <ul>
-        {% for subscription in subscriptions %}
-            <li>{{ subscription.user.username }} <a href="{% url 'unfollow' subscription.user.username %}">Désabonner</a></li>
-        {% endfor %}
-    </ul>
 
-    <h1>Abonnés</h1>
-    <ul>
-        {% for subscriber in subscribers %}
-            <li>{{ subscriber.user.username }}</li>
-        {% endfor %}
-    </ul>
+<div class="container">
+
+    <header>
+        <h1>LITReview</h1>
+        <nav>
+            <a href="#">Flux</a>
+            <a href="#">Posts</a>
+            <a href="#">Abonnements</a>
+            <a href="#">Se déconnecter</a>
+        </nav>
+    </header>
+
+    <div class="follow-form">
+        <h2>Suivre d'autres utilisateurs</h2>
+        <input type="text" placeholder="Nom d'utilisateur">
+        <button>Envoyer</button>
+    </div>
+
+    <div class="list-section">
+        <h3>Abonnements</h3>
+        <table>
+            <tr>
+                <td>jean_5679</td>
+                <td class="unsubscribe-button"><button>Désabonner</button></td>
+            </tr>
+            <tr>
+                <td>sarahj</td>
+                <td class="unsubscribe-button"><button>Désabonner</button></td>
+            </tr>
+            <tr>
+                <td>severine123</td>
+                <td class="unsubscribe-button"><button>Désabonner</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="list-section">
+        <h3>Abonnés</h3>
+        <table>
+            <tr>
+                <td>jean_5679</td>
+                <td class="unsubscribe-button"><button>Bloquer</button></td>
+            </tr>
+            <tr>
+                <td>severine123</td>
+                <td class="unsubscribe-button"><button>Bloquer</button></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
 </body>
 </html>
 

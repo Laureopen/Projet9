@@ -1,45 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Flux</title>
+</head>
+<body>
 
-{% block content %}
+<div class="container">
 
-<h1 style="text-align: center;">LITReview</h1>
 
-<nav style="text-align: center; margin-bottom: 20px;">
-  <a href="{% url 'flux' %">Flux</a>
-  <a href="{% url 'posts' %}">Posts</a>
-  <a href="{% url 'abonnements' %}">Abonnements</a>
-  <a href="{% url 'logout' %}">Se déconnecter</a>
-</nav>
+    <header>
+        <h1>LITReview</h1>
+        <nav>
+            <a href="#">Flux</a>
+            <a href="#">Posts</a>
+            <a href="#">Abonnements</a>
+            <a href="#">Se déconnecter</a>
+        </nav>
+    </header>
 
-<div style="text-align: center; margin: 20px 0;">
-  <a href="{% url 'ask_review' %}"><button>Demander une critique</button></a>
-  <a href="{% url 'create_review' %}"><button>Créer une critique</button></a>
-</div>
-
-{% for post in posts %}
-  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <p><strong>{{ post.header }}</strong> - {{ post.timestamp|date:"H:i, d F Y" }}</p>
-
-    <h3>
-      {{ post.title }}
-      {% if not post.can_review %} - ★★★★★{% endif %}
-    </h3>
-
-    <p>{{ post.description }}</p>
-
-    <div style="border: 1px solid #eee; padding: 10px; margin-top: 10px;">
-      <p><strong>Ticket - {{ post.ticket.user.username }}</strong></p>
-      <p>{{ post.ticket.title }} - {{ post.ticket.author }}</p>
-      {% if post.ticket.image %}
-        <img src="{{ post.ticket.image.url }}" alt="Ticket Image" style="height: 150px;">
-      {% endif %}
+    <div class="actions">
+        <button>Demander une critique</button>
+        <button>Créer une critique</button>
     </div>
 
-    {% if post.can_review %}
-      <a href="{% url 'create-review' %}?ticket_id={{ post.ticket.id }}">
-        <button style="margin-top: 10px;">Créer une critique</button>
-      </a>
-    {% endif %}
-  </div>
-{% endfor %}
+    <div class="post">
+        <p><strong>Vous avez publié une critique</strong></p>
+        <p><strong>véritablement révolutionnaire - ★★★★★</strong></p>
+        <p>Une excellente lecture et je vous recommande vivement !</p>
+        <div class="meta">13:14, 26 août 2020</div>
 
-{% endblock %}
+        <div class="ticket">
+            <p><strong>Ticket - jean8597</strong></p>
+            <p>The Origin of Species - Charles Darwin</p>
+            <img src="" alt="Image du livre">
+        </div>
+    </div>
+
+    <div class="post">
+        <p><strong>sarahj a demandé une critique</strong></p>
+        <p>Une brève histoire du temps - Stephen Hawking</p>
+        <div class="meta">13:14, 26 août 2020</div>
+
+        <div class="ticket">
+            <div class="buttons">
+                <button>Créer une critique</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="post">
+        <p><strong>jean_5679 a demandé une critique</strong></p>
+        <p>The Origin of Species - Charles Darwin</p>
+        <p>Je suis à la recherche d’un avis sur ce sujet, svp, merci !</p>
+        <div class="meta">13:10, 26 août 2020</div>
+
+        <div class="ticket">
+            <img src="" alt="Image du livre">
+        </div>
+    </div>
+
+    <div class="post">
+        <p><strong>sarahj posted a review</strong></p>
+        <p><strong>Excellent - ★★★★☆</strong></p>
+        <div class="meta">12:30, 26 août 2020</div>
+
+        <div class="ticket">
+            <p><strong>Ticket - sarahj</strong></p>
+            <p>Discours de la méthode - René Descartes</p>
+
+            <div class="buttons">
+                <button>Créer une critique</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="note">
+        <p>Bloquer les critiques sur tickets si un utilisateur a déjà posté une critique en réponse.</p>
+    </div>
+</div>
+
+</body>
+</html>

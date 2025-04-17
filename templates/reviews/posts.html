@@ -1,28 +1,79 @@
 
-  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <p><strong>{{ post.header }}</strong> - {{ post.timestamp|date:"H:i, d F Y" }}</p>
+  <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Vos posts</title>
+</head>
+<body>
 
-    <h3>
-      {{ post.title }}
-      {% if not post.can_review %} - ★★★★★{% endif %}
-    </h3>
+<div class="container">
 
-    <p>{{ post.description }}</p>
 
-    <div style="border: 1px solid #eee; padding: 10px; margin-top: 10px;">
-      <p><strong>Ticket - {{ post.ticket.user.username }}</strong></p>
-      <p>{{ post.ticket.title }} - {{ post.ticket.author }}</p>
-      {% if post.ticket.image %}
-        <img src="{{ post.ticket.image.url }}" alt="Ticket Image" style="height: 150px;">
-      {% endif %}
+    <header>
+        <h1>LITReview</h1>
+        <nav>
+            <a href="#">Flux</a>
+            <a href="#">Posts</a>
+            <a href="#">Abonnements</a>
+            <a href="#">Se déconnecter</a>
+        </nav>
+    </header>
+
+    <h2>Vos posts</h2>
+
+    <div class="post">
+        <p><strong>Vous avez publié une critique</strong></p>
+        <p><strong>véritablement révolutionnaire - ★★★★★</strong></p>
+        <p>Une excellente lecture et je vous recommande vivement !</p>
+        <div class="meta">13:14, 26 août 2020</div>
+
+        <div class="ticket">
+            <p><strong>Ticket - jean8597</strong></p>
+            <p>The Origin of Species - Charles Darwin</p>
+            <img src="" alt="Image du livre">
+        </div>
+
+        <div class="buttons">
+            <button>Modifier</button>
+            <button>Supprimer</button>
+        </div>
     </div>
 
-    {% if post.can_review %}
-      <a href="{% url 'create-review' %}?ticket_id={{ post.ticket.id }}">
-        <button style="margin-top: 10px;">Créer une critique</button>
-      </a>
-    {% endif %}
-  </div>
+    <div class="post">
+        <p><strong>Vous avez publié une critique</strong></p>
+        <p><strong>Exceptional - ★★★★★</strong></p>
+        <div class="meta">13:14, 26 août 2020</div>
 
+        <div class="ticket">
+            <p><strong>Ticket - Vous</strong></p>
+            <p>La relativité - Albert Einstein</p>
+            <img src="" alt="Einstein">
+        </div>
 
+        <div class="buttons">
+            <button>Modifier</button>
+            <button>Supprimer</button>
+        </div>
+    </div>
 
+    <div class="post">
+        <p><strong>Vous avez publié un ticket</strong></p>
+        <p>La relativité - Albert Einstein</p>
+        <div class="meta">13:14, 26 août 2020</div>
+
+        <img src="" alt="Einstein">
+
+        <div class="buttons">
+            <button>Modifier</button>
+            <button>Supprimer</button>
+        </div>
+    </div>
+
+    <div class="note">
+        <p>Les critiques qui sont affichées en réponse au ticket de l’utilisateur lui-même doivent être listées séparément du ticket</p>
+    </div>
+</div>
+
+</body>
+</html>
