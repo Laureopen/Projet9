@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Value, CharField
 from django.contrib.auth.decorators import login_required
-from .forms import TicketForm, ReviewForm
-from .models import Ticket, Review
+from .forms import TicketForm, ReviewForm, PostForm
+from .models import Ticket, Review, Post
 from itertools import chain
+
 
 def home(request):
     return HttpResponse("Bienvenue dans l'application Reviews ! 🎉")
@@ -67,3 +68,29 @@ def flux(request):
     posts.sort(key=lambda x: x["timestamp"], reverse=True)
 
     return render(request, "reviews/flux.html", {"posts": posts})
+
+
+def posts_view(request):
+    posts = Post.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'reviews/posts.html', {'posts': posts})
+
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('posts')  # redirige vers la page qui affiche les posts
+    else:
+        form = PostForm()
+    return render(request, 'reviews/create_post.html', {'form': form})
+
+
+def abonnements(request):
+    return render(request, 'reviews/abonnements.html')
+
+
+def ask_review(request):
+    return render(request, 'reviews/ask_review.html')

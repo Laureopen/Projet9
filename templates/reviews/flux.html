@@ -4,15 +4,15 @@
 <h1 style="text-align: center;">LITReview</h1>
 
 <nav style="text-align: center; margin-bottom: 20px;">
-  <a href="#">Flux</a>
-  <a href="#">Posts</a>
-  <a href="#">Abonnements</a>
+  <a href="{% url 'flux' %">Flux</a>
+  <a href="{% url 'posts' %}">Posts</a>
+  <a href="{% url 'abonnements' %}">Abonnements</a>
   <a href="{% url 'logout' %}">Se déconnecter</a>
 </nav>
 
 <div style="text-align: center; margin: 20px 0;">
-  <a href="{% url 'flux' %}"><button>Demander une critique</button></a>
-  <a href="{% url 'flux' %}"><button>Créer une critique</button></a>
+  <a href="{% url 'ask_review' %}"><button>Demander une critique</button></a>
+  <a href="{% url 'create_review' %}"><button>Créer une critique</button></a>
 </div>
 
 {% for post in posts %}

@@ -1,5 +1,8 @@
 from django import forms
-from .models import Ticket, Review
+from django.contrib.auth.models import User
+
+from . import models
+from .models import Ticket, Review, Post
 
 
 class TicketForm(forms.ModelForm):
@@ -19,4 +22,15 @@ class ReviewForm(forms.ModelForm):
         fields = ['headline', 'rating', 'body']
         widgets = {
             'rating': forms.Select(choices=[(i, i) for i in range(6)]),
+        }
+
+
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Écris ton post ici...'})
         }
