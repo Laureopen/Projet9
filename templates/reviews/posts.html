@@ -1,15 +1,28 @@
-{% extends 'base.html' %}
-{% block content %}
-  <h2>Mes Posts</h2>
-  <a href="{% url 'create_post' %}">+ Nouveau post</a>
-  <ul>
-    {% for post in posts %}
-      <li>
-        <p>{{ post.content }}</p>
-        <small>Posté le {{ post.created_at|date:"d/m/Y H:i" }}</small>
-      </li>
-    {% empty %}
-      <li>Tu n’as pas encore publié de post.</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+
+  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <p><strong>{{ post.header }}</strong> - {{ post.timestamp|date:"H:i, d F Y" }}</p>
+
+    <h3>
+      {{ post.title }}
+      {% if not post.can_review %} - ★★★★★{% endif %}
+    </h3>
+
+    <p>{{ post.description }}</p>
+
+    <div style="border: 1px solid #eee; padding: 10px; margin-top: 10px;">
+      <p><strong>Ticket - {{ post.ticket.user.username }}</strong></p>
+      <p>{{ post.ticket.title }} - {{ post.ticket.author }}</p>
+      {% if post.ticket.image %}
+        <img src="{{ post.ticket.image.url }}" alt="Ticket Image" style="height: 150px;">
+      {% endif %}
+    </div>
+
+    {% if post.can_review %}
+      <a href="{% url 'create-review' %}?ticket_id={{ post.ticket.id }}">
+        <button style="margin-top: 10px;">Créer une critique</button>
+      </a>
+    {% endif %}
+  </div>
+
+
+

@@ -4,12 +4,11 @@ from . import views
 urlpatterns = [
     path('', views.home, name='reviews-home'),
     path('tickets/', views.ticket_list, name='ticket-list'),
-    path('create_review/', views.create_review, name='create-review'),
     path('flux/', views.flux, name='flux'),
     path('posts/', views.posts_view, name='posts'),
     path('abonnements/', views.abonnements, name='abonnements'),
     path('demander-critique/', views.ask_review, name='ask_review'),
-    path('créer-une-critique/', views.ask_review, name='create_review'),
+    path('créer-une-critique/', views.create_review, name='create_review'),
 
 
 ]

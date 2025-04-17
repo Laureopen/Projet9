@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-
 from . import models
 from .models import Ticket, Review, Post
 
@@ -23,7 +22,6 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             'rating': forms.Select(choices=[(i, i) for i in range(6)]),
         }
-
 
 
 
