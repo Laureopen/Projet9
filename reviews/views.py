@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.db.models import Value, CharField
-from django.contrib.auth.decorators import login_required
 from .forms import TicketForm, ReviewForm, PostForm
 from .models import Ticket, Review, Post
-from itertools import chain
 
 
 def home(request):

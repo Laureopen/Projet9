@@ -12,17 +12,18 @@
     <header>
         <h1>LITReview</h1>
         <nav>
-            <a href="#">Flux</a>
-            <a href="#">Posts</a>
-            <a href="#">Abonnements</a>
-            <a href="#">Se déconnecter</a>
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'abonnements' %}">Abonnements</a>
+            <a href="{% url 'logout' %}">Se déconnecter</a>
         </nav>
     </header>
 
     <div class="actions">
-        <button>Demander une critique</button>
-        <button>Créer une critique</button>
-    </div>
+      <button onclick="window.location.href='ask_review'">Demander une critique</button>
+    <button onclick="window.location.href='create_review'">Créer une critique</button>
+</div>
+
 
     <div class="post">
         <p><strong>Vous avez publié une critique</strong></p>
