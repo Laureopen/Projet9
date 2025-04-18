@@ -32,3 +32,10 @@ class PostForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Écris ton post ici...'})
         }
+
+
+RATING_CHOICES = [(i, f"{i} étoile{'s' if i > 1 else ''}") for i in range(1, 6)]
+
+
+
+
