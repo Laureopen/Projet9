@@ -1,5 +1,4 @@
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +7,6 @@
 <body>
 
 <div class="container">
-
 
     <header>
         <h1>LITReview</h1>
@@ -22,57 +20,39 @@
 
     <h2>Vos posts</h2>
 
-    <div class="post">
-        <p><strong>Vous avez publié une critique</strong></p>
-        <p><strong>véritablement révolutionnaire - ★★★★★</strong></p>
-        <p>Une excellente lecture et je vous recommande vivement !</p>
-        <div class="meta">13:14, 26 août 2020</div>
 
-        <div class="ticket">
-            <p><strong>Ticket - jean8597</strong></p>
-            <p>The Origin of Species - Charles Darwin</p>
-            <img src="" alt="Image du livre">
+        <div class="post">
+            {% if post.type == "critique" %}
+                <p><strong>Vous avez publié une critique</strong></p>
+                <p><strong>{{ post.titre }} - ★{{ post.note }}/5</strong></p>
+                <p>{{ post.contenu }}</p>
+            {% elif post.type == "ticket" %}
+                <p><strong>Vous avez publié un ticket</strong></p>
+                <p>{{ post.titre }}</p>
+            {% endif %}
+
+            <div class="meta">{{ post.date|date:"H:i, d F Y" }}</div>
+
+            {% if post.ticket %}
+                <div class="ticket">
+                    <p><strong>Ticket - {{ post.ticket.utilisateur }}</strong></p>
+                    <p>{{ post.ticket.titre }}</p>
+                    {% if post.ticket.image %}
+                        <img src="{{ post.ticket.image.url }}" alt="Image du livre">
+                    {% endif %}
+                </div>
+            {% elif post.image %}
+                <img src="{{ post.image.url }}" alt="Image du ticket">
+            {% endif %}
+
+            <div class="buttons">
+                <button onclick="window.location.href='{% url 'modify_post' %}'">Modifier</button>
+                <button onclick="window.location.href='{% url 'delete_post' %}'">Supprimer</button>
+            </div>
         </div>
 
-        <div class="buttons">
-            <button>Modifier</button>
-            <button>Supprimer</button>
-        </div>
-    </div>
+        <p>Vous n’avez encore publié aucun post.</p>
 
-    <div class="post">
-        <p><strong>Vous avez publié une critique</strong></p>
-        <p><strong>Exceptional - ★★★★★</strong></p>
-        <div class="meta">13:14, 26 août 2020</div>
-
-        <div class="ticket">
-            <p><strong>Ticket - Vous</strong></p>
-            <p>La relativité - Albert Einstein</p>
-            <img src="" alt="Einstein">
-        </div>
-
-        <div class="buttons">
-            <button>Modifier</button>
-            <button>Supprimer</button>
-        </div>
-    </div>
-
-    <div class="post">
-        <p><strong>Vous avez publié un ticket</strong></p>
-        <p>La relativité - Albert Einstein</p>
-        <div class="meta">13:14, 26 août 2020</div>
-
-        <img src="" alt="Einstein">
-
-        <div class="buttons">
-            <button>Modifier</button>
-            <button>Supprimer</button>
-        </div>
-    </div>
-
-    <div class="note">
-        <p>Les critiques qui sont affichées en réponse au ticket de l’utilisateur lui-même doivent être listées séparément du ticket</p>
-    </div>
 </div>
 
 </body>

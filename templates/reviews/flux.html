@@ -8,7 +8,6 @@
 
 <div class="container">
 
-
     <header>
         <h1>LITReview</h1>
         <nav>
@@ -20,65 +19,42 @@
     </header>
 
     <div class="actions">
-      <button onclick="window.location.href='ask_review'">Demander une critique</button>
-    <button onclick="window.location.href='create_review'">Créer une critique</button>
-</div>
-
-
-    <div class="post">
-        <p><strong>Vous avez publié une critique</strong></p>
-        <p><strong>véritablement révolutionnaire - ★★★★★</strong></p>
-        <p>Une excellente lecture et je vous recommande vivement !</p>
-        <div class="meta">13:14, 26 août 2020</div>
-
-        <div class="ticket">
-            <p><strong>Ticket - jean8597</strong></p>
-            <p>The Origin of Species - Charles Darwin</p>
-            <img src="" alt="Image du livre">
-        </div>
+        <button onclick="window.location.href='{% url 'ask_review' %}'">Demander une critique</button>
+        <button onclick="window.location.href='{% url 'create_review' %}'">Créer une critique</button>
     </div>
 
+    {% for review in reviews %}
     <div class="post">
-        <p><strong>sarahj a demandé une critique</strong></p>
-        <p>Une brève histoire du temps - Stephen Hawking</p>
-        <div class="meta">13:14, 26 août 2020</div>
+        <p><strong>{{ review.user.username }} a publié une critique</strong></p>
+
+        <p>{{ review.comment }}</p>
+        <div class="meta">{{ review.created_at }}</div>
 
         <div class="ticket">
+            <p><strong>Ticket - {{ review.book.author }}</strong></p>
+            <p>{{ review.book.title }}</p>
+            <img src="{{ review.book.image.url }}" alt="Image du livre">
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for ticket in tickets %}
+    <div class="post">
+        <p><strong>{{ ticket.user.username }} a demandé une critique</strong></p>
+        <p>{{ ticket.book.title }} - {{ ticket.book.author }}</p>
+        <p>{{ ticket.description }}</p>
+        <div class="meta">{{ ticket.created_at }}</div>
+
+        <div class="ticket">
+            <img src="{{ ticket.book.image.url }}" alt="Image du livre">
             <div class="buttons">
-                <button>Créer une critique</button>
+                <button onclick="window.location.href='{% url 'create_review' %}?ticket_id={{ ticket.id }}'">Créer une critique</button>
             </div>
         </div>
     </div>
+    {% endfor %}
 
-    <div class="post">
-        <p><strong>jean_5679 a demandé une critique</strong></p>
-        <p>The Origin of Species - Charles Darwin</p>
-        <p>Je suis à la recherche d’un avis sur ce sujet, svp, merci !</p>
-        <div class="meta">13:10, 26 août 2020</div>
 
-        <div class="ticket">
-            <img src="" alt="Image du livre">
-        </div>
-    </div>
-
-    <div class="post">
-        <p><strong>sarahj posted a review</strong></p>
-        <p><strong>Excellent - ★★★★☆</strong></p>
-        <div class="meta">12:30, 26 août 2020</div>
-
-        <div class="ticket">
-            <p><strong>Ticket - sarahj</strong></p>
-            <p>Discours de la méthode - René Descartes</p>
-
-            <div class="buttons">
-                <button>Créer une critique</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="note">
-        <p>Bloquer les critiques sur tickets si un utilisateur a déjà posté une critique en réponse.</p>
-    </div>
 </div>
 
 </body>

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-     <title>Abonnements</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Abonnements{% endblock %}
+
+{% block content %}
 <div class="container">
 
     <header>
@@ -20,45 +17,54 @@
 
     <div class="follow-form">
         <h2>Suivre d'autres utilisateurs</h2>
-        <input type="text" placeholder="Nom d'utilisateur">
-        <button>Envoyer</button>
+        <form method="post">
+            {% csrf_token %}
+            {{ follow_form.username.label_tag }}
+            {{ follow_form.username }}
+            <button type="submit">Envoyer</button>
+            {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+        </form>
     </div>
 
     <div class="list-section">
         <h3>Abonnements</h3>
         <table>
-            <tr>
-                <td>jean_5679</td>
-                <td class="unsubscribe-button"><button>Désabonner</button></td>
-            </tr>
-            <tr>
-                <td>sarahj</td>
-                <td class="unsubscribe-button"><button>Désabonner</button></td>
-            </tr>
-            <tr>
-                <td>severine123</td>
-                <td class="unsubscribe-button"><button>Désabonner</button></td>
-            </tr>
+            {% for user in following %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td class="unsubscribe-button">
+                        <form method="post" action="{% url 'unfollow' user.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Désabonner</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">Aucun abonnement.</td></tr>
+            {% endfor %}
         </table>
     </div>
 
     <div class="list-section">
         <h3>Abonnés</h3>
         <table>
-            <tr>
-                <td>jean_5679</td>
-                <td class="unsubscribe-button"><button>Bloquer</button></td>
-            </tr>
-            <tr>
-                <td>severine123</td>
-                <td class="unsubscribe-button"><button>Bloquer</button></td>
-            </tr>
+            {% for user in followers %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td class="unsubscribe-button">
+                        <form method="post" action="{% url 'block_user' user.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Bloquer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">Aucun abonné.</td></tr>
+            {% endfor %}
         </table>
     </div>
 
 </div>
-
-</body>
-</html>
-
-
+{% endblock %}

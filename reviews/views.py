@@ -4,6 +4,7 @@ from .forms import TicketForm, ReviewForm, PostForm
 from .models import Ticket, Review, Post
 
 
+
 def home(request):
     return HttpResponse("Bienvenue dans l'application Reviews ! 🎉")
 
