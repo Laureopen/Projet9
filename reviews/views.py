@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import TicketForm, ReviewForm, PostForm
 from .models import Ticket, Review, Post, UserFollows
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def create_review(request):
@@ -29,35 +30,17 @@ def create_review(request):
     })
 
 
+@login_required
 def flux(request):
-    reviews = Review.objects.select_related("ticket", "user")
-    tickets = Ticket.objects.exclude(review__isnull=False)  # tickets sans review associée
+    # Récupérer les IDs des utilisateurs suivis
+    followed_users_ids = UserFollows.objects.filter(user=request.user).values_list('followed_user_id', flat=True)
 
-    posts = []
+    # Tickets de moi + des gens que je suis
+    tickets = Ticket.objects.filter(
+        Q(user=request.user) | Q(user__in=followed_users_ids)
+    ).order_by('-time_created')
 
-    for review in reviews:
-        posts.append({
-            "header": "Vous avez publié une critique" if review.user == request.user else f"{review.user.username} posted a review",
-            "title": review.headline,
-            "description": review.body,
-            "ticket": review.ticket,
-            "timestamp": review.created_at,
-            "can_review": False
-        })
-
-    for ticket in tickets:
-        posts.append({
-            "header": f"{ticket.user.username} a demandé une critique",
-            "title": ticket.title,
-            "description": ticket.description,
-            "ticket": ticket,
-            "timestamp": ticket.created_at,
-            "can_review": True
-        })
-
-    posts.sort(key=lambda x: x["timestamp"], reverse=True)
-
-    return render(request, "reviews/flux.html", {"posts": posts})
+    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
 
 
 def posts_view(request):
@@ -78,24 +61,37 @@ def create_post(request):
     return render(request, 'reviews/create_post.html', {'form': form})
 
 
-def abonnements(request):
+@login_required
+def subscriptions(request):
+    message = ""
+
     if request.method == 'POST':
-        username_to_follow = request.POST.get('username')
-        try:
-            user_to_follow = User.objects.get(username=username_to_follow)
-            if user_to_follow != request.user:
-                UserFollows.objects.get_or_create(user=request.user, followed_user=user_to_follow)
-        except User.DoesNotExist:
-            pass  # ou gérer une erreur utilisateur non trouvé
+        if 'unfollow_id' in request.POST:
+            user_id = request.POST.get('unfollow_id')
+            to_unfollow = get_object_or_404(User, id=user_id)
+            UserFollows.objects.filter(user=request.user, followed_user=to_unfollow).delete()
+            message = f"Vous vous êtes désabonné de {to_unfollow.username}."
+        else:
+            username = request.POST.get('username')
+            try:
+                to_follow = User.objects.get(username=username)
+                if to_follow == request.user:
+                    message = "Vous ne pouvez pas vous abonner à vous-même."
+                elif UserFollows.objects.filter(user=request.user, followed_user=to_follow).exists():
+                    message = "Vous êtes déjà abonné à cet utilisateur."
+                else:
+                    UserFollows.objects.create(user=request.user, followed_user=to_follow)
+                    message = f"Abonnement à {to_follow.username} réussi."
+            except User.DoesNotExist:
+                message = "Utilisateur non trouvé."
 
-        return redirect('abonnements')  # recharge la page après l’ajout
+    abonnements = request.user.following.select_related('followed_user')
+    abonnés = request.user.followers.select_related('user')
 
-    abonnements = UserFollows.objects.filter(user=request.user)
-    abonnes = UserFollows.objects.filter(followed_user=request.user)
-
-    return render(request, 'reviews/abonnements.html', {
+    return render(request, 'reviews/subscriptions.html', {
         'abonnements': abonnements,
-        'abonnes': abonnes,
+        'abonnes': abonnés,
+        'message': message,
     })
 
 def ask_review(request):
@@ -159,3 +155,9 @@ def create_review_for_ticket(request, ticket_id):
         'review_form': review_form,
         'ticket': ticket,
     })
+
+
+@login_required
+def my_ticket_list(request):
+    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
+    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})

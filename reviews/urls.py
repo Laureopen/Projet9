@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     path('creer-un-ticket/', views.create_ticket, name='create_ticket'),
     path('flux/', views.flux, name='flux'),
-    path('posts/', views.posts_view, name='posts'),
-    path('abonnements/', views.abonnements, name='abonnements'),
+    path('posts/', views.my_ticket_list, name='posts'),
+    path('abonnements/', views.subscriptions, name='abonnements'),
     path('demander-critique/', views.ask_review, name='ask_review'),
     path('creer-une-critique/', views.create_review, name='create_review'),
     path('modifier/', views.ask_review, name='modify_post'),
