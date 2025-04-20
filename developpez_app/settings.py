@@ -127,4 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auth/login/'  # URL de connexion
 LOGIN_REDIRECT_URL = '/reviews/flux/'  # Page d'accueil après login
 LOGOUT_REDIRECT_URL = '/auth/login/'  # Page après déconnexion
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

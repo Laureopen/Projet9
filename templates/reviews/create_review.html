@@ -22,47 +22,40 @@
 </nav>
 
 <div class="form-container">
-    <h1>Créer une critique</h1>
+    <h2>Ajouter une critique pour : {{ ticket.title }}</h2>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+        <form method="post">
+            {% csrf_token %}
 
-        <!-- TICKET -->
-        <label for="id_title">Titre du ticket :</label>
-        {{ ticket_form.title }}
+            <div>
+                <label for="id_headline">Titre de la critique :</label><br>
+                <input type="text" name="headline" id="id_headline" value="{{ review_form.headline.value|default:'' }}">
+                {% if review_form.headline.errors %}
+                    <div class="error">{{ review_form.headline.errors }}</div>
+                {% endif %}
+            </div>
 
-        <label for="id_description">Description :</label>
-        {{ ticket_form.description }}
+            <div>
+                <label for="id_rating">Note (entre 0 et 5) :</label><br>
+                <input type="number" name="rating" id="id_rating" min="0" max="5" value="{{ review_form.rating.value|default:'' }}">
+                {% if review_form.rating.errors %}
+                    <div class="error">{{ review_form.rating.errors }}</div>
+                {% endif %}
+            </div>
 
-        <label for="id_image">Image :</label>
-        {{ ticket_form.image }}
+            <div>
+                <label for="id_body">Contenu de la critique (facultatif) :</label><br>
+                <textarea name="body" id="id_body" rows="5">{{ review_form.body.value|default:'' }}</textarea>
+                {% if review_form.body.errors %}
+                    <div class="error">{{ review_form.body.errors }}</div>
+                {% endif %}
+            </div>
 
-        <!-- REVIEW -->
-        <label for="id_headline">Titre de la critique :</label>
-        {{ review_form.headline }}
+            <button type="submit">Envoyer la critique</button>
+        </form>
 
-        <label for="id_rating"></label>
-        <div class="star-rating">Note :</label>
-            <input type="radio" name="rating" id="star5" value="5"><label for="star5">&#9733;</label>
-            <input type="radio" name="rating" id="star4" value="4"><label for="star4">&#9733;</label>
-            <input type="radio" name="rating" id="star3" value="3"><label for="star3">&#9733;</label>
-            <input type="radio" name="rating" id="star2" value="2"><label for="star2">&#9733;</label>
-            <input type="radio" name="rating" id="star1" value="1"><label for="star1">&#9733;</label>
-        </div>
 
-        <label for="id_body">Commentaire :</label>
-        {{ review_form.body }}
-
-        <button type="submit">Envoyer</button>
-    </form>
 </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
