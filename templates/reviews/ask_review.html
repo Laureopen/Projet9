@@ -16,7 +16,10 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'posts' %}">Posts</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'abonnements' %}">Abonnements</a></li>
             </ul>
-            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Se déconnecter</a>
+            <form method="post" action="{% url'logout'%}">
+                {% csrf_token %}
+                <button type="submit">logout</button>
+            </form>
         </div>
     </div>
 </nav>
