@@ -1,34 +1,28 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import TicketForm, ReviewForm, PostForm
 from .models import Ticket, Review, Post, UserFollows
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 
 
-def create_review(request):
-    if request.method == 'POST':
-        ticket_form = TicketForm(request.POST, request.FILES)
-        review_form = ReviewForm(request.POST)
-        if ticket_form.is_valid() and review_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            review = review_form.save(commit=False)
-            review.ticket = ticket
-            review.user = request.user
-            review.save()
-            return redirect('ticket-list')  # redirection après création
-    else:
-        ticket_form = TicketForm()
-        review_form = ReviewForm()
+def home(request):
+    return HttpResponse("Bienvenue dans l'application Reviews ! 🎉")
 
-    return render(request, 'reviews/create_review.html', {
-        'ticket_form': ticket_form,
-        'review_form': review_form,
-    })
 
+def ticket_list(request):
+    tickets = Ticket.objects.all()
+    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
+
+@login_required
+@csrf_exempt
+def my_ticket_list(request):
+    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
+    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
 
 @login_required
 def flux(request):
@@ -42,23 +36,65 @@ def flux(request):
 
     return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
 
+def subscriptions_ticket_list(request):
+    tickets = Ticket.objects.all()
+    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
 
-def posts_view(request):
-    posts = Post.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'reviews/posts.html', {'posts': posts})
 
-
-def create_post(request):
+def create_ticket(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
-            return redirect('posts')  # redirige vers la page qui affiche les posts
+        ticket_form = TicketForm(request.POST, request.FILES)
+        if ticket_form.is_valid():
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect('ticket-list')  # redirection après création
     else:
-        form = PostForm()
-    return render(request, 'reviews/create_post.html', {'form': form})
+        ticket_form = TicketForm()
+    return render(request, 'reviews/create_ticket.html', {
+        'ticket_form': ticket_form
+    })
+@csrf_exempt
+@login_required
+def create_review_for_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                html = render_to_string('reviews/single_review.html', {'review': review})
+                return JsonResponse({'html': html})
+
+            return redirect('ticket-list')
+
+    else:
+        review_form = ReviewForm()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('reviews/review_form_partial.html', {
+            'review_form': review_form,
+            'ticket': ticket,
+        })
+        return JsonResponse({'html': html})
+
+    return render(request, 'reviews/create_review.html', {
+        'review_form': review_form,
+        'ticket': ticket,
+    })
+
+
+def abonnements(request):
+    return render(request, 'reviews/abonnements.html')
+
+
+def ask_review(request):
+    return render(request, 'reviews/ask_review.html')
 
 
 @login_required
@@ -93,71 +129,3 @@ def subscriptions(request):
         'abonnes': abonnés,
         'message': message,
     })
-
-def ask_review(request):
-    if request.method == 'POST':
-        ticket_form = TicketForm(request.POST, request.FILES)
-        review_form = ReviewForm(request.POST)
-        if ticket_form.is_valid() and review_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            review = review_form.save(commit=False)
-            review.ticket = ticket
-            review.user = request.user
-            review.save()
-            return redirect('ticket-list')  # redirection après création
-    else:
-        ticket_form = TicketForm()
-        review_form = ReviewForm()
-
-    return render(request, 'reviews/ask_review.html', {
-        'ticket_form': ticket_form,
-        'review_form': review_form,
-    })
-
-
-def create_ticket(request):
-    if request.method == 'POST':
-        ticket_form = TicketForm(request.POST, request.FILES)
-        if ticket_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            return redirect('ticket-list')
-    else:
-        ticket_form = TicketForm()  # pour les requêtes GET
-
-    return render(request, 'reviews/create_ticket.html', {
-        'ticket_form': ticket_form
-    })
-
-
-def ticket_list(request):
-    tickets = Ticket.objects.all()
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
-
-
-def create_review_for_ticket(request, ticket_id):
-    ticket = get_object_or_404(Ticket, id=ticket_id)
-    if request.method == 'POST':
-        review_form = ReviewForm(request.POST)
-        if review_form.is_valid():
-            review = review_form.save(commit=False)
-            review.ticket = ticket
-            review.user = request.user
-            review.save()
-            return redirect('ticket-list')  # Redirection après création de la review
-    else:
-        review_form = ReviewForm()
-
-    return render(request, 'reviews/create_review.html', {
-        'review_form': review_form,
-        'ticket': ticket,
-    })
-
-
-@login_required
-def my_ticket_list(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
