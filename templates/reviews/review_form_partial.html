@@ -1,20 +1,32 @@
-<form method="post" class="ajax-review-form" action="{% url 'create-review-for-ticket' ticket.id %}">
+<form method="post" class="ajax-review-form border border-dark rounded p-3 mb-4" action="{% url 'create-review-for-ticket' ticket.id %}">
     {% csrf_token %}
-
     <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
 
-    <label for="id_headline">Titre :</label>
-    {{ review_form.headline }}
-
-    <label>Note :</label>
-    <div class="star-rating">
-        {% for i in "54321" %}
-            <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" {% if review_form.rating.value == i %}checked{% endif %}>
-            <label for="star{{ i }}">★</label>
-        {% endfor %}
+    <div>
+        <label for="id_headline">Titre :</label><br>
+        {{ review_form.headline }}
     </div>
 
-    <label for="id_body">Contenu :</label>
-    {{ review_form.body }}
-    <button type="submit">Envoyer</button>
+    <div>
+        <label>Note :</label><br>
+        <input type="hidden" name="rating" value="0" id="rating-value">
+
+        <div class="rating">
+            {% for i in "54321" %}
+                <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                {% if review_form.rating.value == i %}checked{% endif %}
+                onclick="updateRating({{ i }})">
+                <label for="star{{ i }}" title="{{ i }} étoiles">★</label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <label for="id_body">Contenu :</label><br>
+        {{ review_form.body }}
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </div>
 </form>

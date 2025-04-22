@@ -1,0 +1,26 @@
+.rating {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  font-size: 2rem;
+  display: inline-flex;
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.rating input:checked ~ label,
+.rating input:checked  label  label {
+  color: #fc0;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  color: #fc0;
+}

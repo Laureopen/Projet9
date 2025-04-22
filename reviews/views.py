@@ -54,8 +54,8 @@ def create_ticket(request):
     return render(request, 'reviews/create_ticket.html', {
         'ticket_form': ticket_form
     })
-@csrf_exempt
 @login_required
+@csrf_exempt
 def create_review_for_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
@@ -87,10 +87,6 @@ def create_review_for_ticket(request, ticket_id):
         'review_form': review_form,
         'ticket': ticket,
     })
-
-
-def abonnements(request):
-    return render(request, 'reviews/abonnements.html')
 
 
 def ask_review(request):

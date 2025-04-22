@@ -1,4 +1,3 @@
-<script>
 $(document).ready(function() {
     $('.review-button').on('click', function() {
         const url = $(this).data('url');
@@ -42,5 +41,8 @@ $(document).ready(function() {
         });
     });
 });
-</script>
 
+function updateRating(value) {
+    // Mise à jour de la valeur cachée lorsque l'utilisateur clique sur une étoile
+    document.getElementById('rating-value').value = value;
+}
