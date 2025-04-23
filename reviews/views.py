@@ -15,7 +15,7 @@ def home(request):
 
 
 def ticket_list(request):
-    tickets = Ticket.objects.all()
+    tickets = Ticket.objects.all().order_by('-time_created')
     return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
 
 @login_required

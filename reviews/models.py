@@ -19,6 +19,13 @@ class Ticket(models.Model):
         return f"{self.title} - {self.user}"
 
 
+    def ordered_review_set(self):
+        return self.review_set.all().order_by('-time_created')
+
+
+
+
+
 class Review(models.Model):
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(

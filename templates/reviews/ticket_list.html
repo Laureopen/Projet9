@@ -40,23 +40,22 @@
             {% endif %}
             <div class="card-footer d-flex justify-content-between align-items-center">
                 <small class="text-muted">Par {{ ticket.user }}<br>le {{ ticket.time_created|date:"d/m/Y H:i" }}</small>
-                <button class="btn btn-sm btn-primary review-button" data-ticket-id="{{ ticket.id }}" data-url="{% url 'create-review-for-ticket' ticket.id %}">
+                <button class="btn btn-sm btn-primary review-button" data-ticket-id="{{ ticket.id }}"
+                        data-url="{% url 'create-review-for-ticket' ticket.id %}"
+                        {% if ticket.ordered_review_set|length  > 0 %} disabled {% endif %}>
                     Ajouter une critique
                 </button>
             </div>
             <div class="review-form-container mt-3" id="review-form-{{ ticket.id }}"></div>
-            <div class="reviews-list mt-3">
-
-            </div>
         </div>
-    {% empty %}
-        <p>Aucun ticket pour le moment.</p>
+    {% for review in ticket.ordered_review_set.all %}
+        <div class="review-container border border-dark rounded p-3 mb-2">
+            {% include 'reviews/single_review.html' %}
+        </div>
     {% endfor %}
-     {% for review in ticket.review_set.all %}
-                    <div class="review-container border border-dark rounded p-3 mb-2">
-                        {% include 'reviews/single_review.html' %}
-                    </div>
-                {% endfor %}
+    {% empty %}
+        <p>Aucun ticket pour le moment</p>
+    {% endfor %}
 </div>
 </body>
 </html>
