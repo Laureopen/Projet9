@@ -47,3 +47,7 @@ function updateRating(value) {
     // Mise à jour de la valeur cachée lorsque l'utilisateur clique sur une étoile
     document.getElementById('rating-value').value = value;
 }
+
+$('#close-fullscreen-form').on('click', function () {
+    $('.fullscreen-form').fadeOut();
+});

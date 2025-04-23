@@ -1,32 +1,45 @@
-<form method="post" class="ajax-review-form border border-dark rounded p-3 mb-4" action="{% url 'create-review-for-ticket' ticket.id %}">
-    {% csrf_token %}
-    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+<div class="fullscreen-form">
+    <div class="form-box">
+        <button id="close-fullscreen-form" class="close-btn">×</button>
+        Vous modifiez le ticket suivant :
+        <h2>{{ ticket.title }}</h2>
+        <p>{{ ticket.description }}</p>
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Image du ticket" class="m-4" style="max-width: 200px;">
+        {% endif %}
 
-    <div>
-        <label for="id_headline">Titre :</label><br>
-        {{ review_form.headline }}
-    </div>
+        <form method="post" class="ajax-review-form border border-dark rounded p-3 mb-2" action="{% url 'create-review-for-ticket' ticket.id %}">
+        {% csrf_token %}
 
-    <div>
-        <label>Note :</label><br>
-        <input type="hidden" name="rating" value="0" id="rating-value">
+        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
 
-        <div class="rating">
-            {% for i in "54321" %}
-                <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
-                {% if review_form.rating.value == i %}checked{% endif %}
-                onclick="updateRating({{ i }})">
-                <label for="star{{ i }}" title="{{ i }} étoiles">★</label>
-            {% endfor %}
+        <div>
+            <label for="id_headline">Titre :</label><br>
+            {{ review_form.headline }}
         </div>
-    </div>
 
-    <div>
-        <label for="id_body">Contenu :</label><br>
-        {{ review_form.body }}
-    </div>
+        <div>
+            <label>Note :</label><br>
+            <input type="hidden" name="rating" value="0" id="rating-value">
 
-    <div>
-        <button type="submit" class="btn btn-primary">Envoyer</button>
+            <div class="rating">
+                {% for i in "54321" %}
+                    <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                    {% if review_form.rating.value == i %}checked{% endif %}
+                    onclick="updateRating({{ i }})">
+                <label for="star{{ i }}" title="{{ i }} étoiles">★</label>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div>
+            <label for="id_body">Contenu :</label><br>
+            {{ review_form.body }}
+        </div>
+
+        <div>
+            <button type="submit">Envoyer</button>
+        </div>
+        </form>
     </div>
-</form>
