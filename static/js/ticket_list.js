@@ -48,6 +48,5 @@ function updateRating(value) {
     document.getElementById('rating-value').value = value;
 }
 
-$('#close-fullscreen-form').on('click', function () {
-    $('.fullscreen-form').fadeOut();
-});
+
+
