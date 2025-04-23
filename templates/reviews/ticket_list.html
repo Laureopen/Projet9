@@ -32,7 +32,7 @@
 <div class="form-container">
     <h1>Liste des tickets</h1>
     {% for ticket in tickets %}
-        <div class="ticket-container border border-dark rounded p-3 mb-4">
+        <div class="ticket-container border border-dark rounded p-3 mb-2">
             <h2>{{ ticket.title }}</h2>
             <p>{{ ticket.description }}</p>
             {% if ticket.image %}
@@ -49,9 +49,7 @@
             <div class="review-form-container mt-3" id="review-form-{{ ticket.id }}"></div>
         </div>
     {% for review in ticket.ordered_review_set.all %}
-        <div class="review-container border border-dark rounded p-3 mb-2">
-            {% include 'reviews/single_review.html' %}
-        </div>
+
     {% endfor %}
     {% empty %}
         <p>Aucun ticket pour le moment</p>

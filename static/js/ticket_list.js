@@ -17,6 +17,7 @@ $(document).ready(function() {
                 container.html(response.html);
             }
         });
+        $(this).prop('disabled', true);
     });
 
     // Soumission AJAX de review
