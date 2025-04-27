@@ -6,23 +6,27 @@ from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import TicketForm, ReviewForm, PostForm
-from .models import Ticket, Review, Post, UserFollows
+from .forms import TicketForm, ReviewForm
+from .models import Ticket, UserFollows
 
 
-def home(request):
-    return HttpResponse("Bienvenue dans l'application Reviews ! 🎉")
-
+@login_required
+def ask_review(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+    ticket.asked_review = True
+    ticket.save()
+    return redirect('posts')
 
 def ticket_list(request):
     tickets = Ticket.objects.all().order_by('-time_created')
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
+    return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 @login_required
-@csrf_exempt
 def my_ticket_list(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
+    tickets_created = Ticket.objects.filter(user=request.user)
+    tickets_reviewed = Ticket.objects.filter(review__user=request.user)
+    tickets = (tickets_created | tickets_reviewed).distinct().order_by('-time_created')
+    return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 @login_required
 def flux(request):
@@ -34,11 +38,11 @@ def flux(request):
         Q(user=request.user) | Q(user__in=followed_users_ids)
     ).order_by('-time_created')
 
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
+    return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 def subscriptions_ticket_list(request):
     tickets = Ticket.objects.all()
-    return render(request, 'reviews/ticket_list.html', {'tickets': tickets})
+    return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 
 def create_ticket(request):
@@ -54,6 +58,7 @@ def create_ticket(request):
     return render(request, 'reviews/create_ticket.html', {
         'ticket_form': ticket_form
     })
+
 @login_required
 @csrf_exempt
 def create_review_for_ticket(request, ticket_id):
@@ -88,9 +93,6 @@ def create_review_for_ticket(request, ticket_id):
         'ticket': ticket,
     })
 
-
-def ask_review(request):
-    return render(request, 'reviews/ask_review.html')
 
 
 @login_required

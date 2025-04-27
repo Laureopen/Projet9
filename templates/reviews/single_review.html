@@ -1,6 +1,7 @@
-<div class="review border border-dark rounded p-3 mb-2">
-    <h4>Critique : {{ review.headline }}</h4>
-    <p>Note : {{ review.rating }}/5</p>
-    <p>{{ review.body }}</p>
-    <small>par {{ review.user.username }} le {{ review.time_created }}</small>
+<div class="row">
+    <div class="col-md-6"><p>{{ review.headline }} - {{ review.rating }}/5</p></div>
+    <div class="col-md-6">
+        {{ review.time_created }}
+    </div>
 </div>
+<p><strong>{{ review.body }}</strong></p>
