@@ -46,6 +46,9 @@
                         </button>
                     </div>
                 {% else %}
+                {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
+                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
+                {% endif %}
                 {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
                 <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">
                     Demander une review
@@ -84,8 +87,3 @@
     {% endfor %}
 </div>
 </html>
-
-
-
-
-

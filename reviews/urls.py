@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('creer-un-ticket/', views.create_ticket, name='create_ticket'),
+    path('ticket/<int:ticket_id>/edit/', views.edit_ticket, name='edit_ticket'),
     path('flux/', views.flux, name='flux'),
     path('posts/', views.my_ticket_list, name='posts'),
     path('abonnements/', views.subscriptions, name='abonnements'),

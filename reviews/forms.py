@@ -1,6 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
-from . import models
 from .models import Ticket, Review, Post
 
 
@@ -19,10 +17,10 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['headline', 'rating', 'body']
-        widgets = {
-            'rating': forms.Select(choices=[(i, i) for i in range(6)]),
-        }
 
+    headline = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    rating = forms.CharField(required=False, widget=forms.Select(choices=[(i, i) for i in range(6)]))
+    body = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control'}))
 
 
 class PostForm(forms.ModelForm):
@@ -35,7 +33,6 @@ class PostForm(forms.ModelForm):
 
 
 RATING_CHOICES = [(i, f"{i} étoile{'s' if i > 1 else ''}") for i in range(1, 6)]
-
 
 
 
