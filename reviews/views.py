@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TicketForm, ReviewForm
-from .models import Ticket, UserFollows
+from .models import Ticket, UserFollows, Review
 
 
 @login_required
@@ -88,6 +88,25 @@ def edit_ticket(request, ticket_id):
     return render(request, 'reviews/edit_ticket.html', {
         'ticket_form': ticket_form,
         'ticket': ticket
+    })
+
+@login_required
+def edit_review(request, review_id):
+    # Récupérer la review avec l'ID, et la lier à l'utilisateur connecté
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST, instance=review)  # Pré-remplir la review
+
+        if review_form.is_valid():
+            review_form.save()  # Sauvegarder la review mise à jour
+            return redirect('ticket-list')  # Redirection après modification
+    else:
+        review_form = ReviewForm(instance=review)
+
+    return render(request, 'reviews/edit_review.html', {
+        'review_form': review_form,
+        'review': review
     })
 
 
