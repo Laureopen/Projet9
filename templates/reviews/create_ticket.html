@@ -25,17 +25,17 @@
 </nav>
 
 <div class="container">
-    <h1>Créer un ticket (et éventuellement une critique)</h1>
+    <h1>Créer une critique </h1>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <!-- Ticket Form -->
         <div class="card border-dark mb-4">
-            <div class="card-header bg-dark text-white">Ticket</div>
+            <div class="card-header bg-dark text-white">Livre/Article</div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label for="id_title" class="form-label">Titre du ticket :</label>
+                    <label for="id_title" class="form-label">Titre  :</label>
                     {{ ticket_form.title }}
                 </div>
                 <div class="mb-3">
@@ -51,10 +51,10 @@
 
         <!-- Review Form -->
         <div class="card border-dark mb-4">
-            <div class="card-header bg-dark text-white">Critique (optionnel)</div>
+            <div class="card-header bg-dark text-white">Critique </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label for="id_headline" class="form-label">Titre de la critique :</label>
+                    <label for="id_headline" class="form-label">Titre :</label>
                     {{ review_form.headline }}
                 </div>
                 <div class="mb-3">
@@ -62,7 +62,7 @@
                     {{ review_form.rating }}
                 </div>
                 <div class="mb-3">
-                    <label for="id_body" class="form-label">Contenu :</label>
+                    <label for="id_body" class="form-label">Commentaire :</label>
                     {{ review_form.body }}
                 </div>
             </div>

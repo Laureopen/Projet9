@@ -33,19 +33,16 @@
 
     <form method="post">
         {% csrf_token %}
-        <label for="username">Pseudo :</label>
+
         <input type="text" name="username" id="username" required>
-        <button type="submit">S’abonner</button>
+        <button type="submit">Envoyer</button>
     </form>
 
     <hr>
 
     <h3>Abonnements</h3>
     <table class="table table-bordered">
-        <tr>
-            <th>Pseudo</th>
-            <th></th>
-        </tr>
+
         {% for follow in abonnements %}
         <tr>
             <td>{{ follow.followed_user.username }}</td>
@@ -63,18 +60,24 @@
     </table>
 
     <h3>Abonnés</h3>
-    <table border="1">
-        <tr>
-            <th>Pseudo</th>
-        </tr>
+    <table class="table table-bordered">
+
         {% for follow in abonnes %}
         <tr>
-            <td>{{ follow.user.username }}</td>
+            <td>{{ follow.followed_user.username }}</td>
+            <td>
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="unfollow_id" value="{{ follow.followed_user.id }}">
+                    <button type="submit" class="btn btn-sm btn-danger">Bloquer</button>
+                </form>
+            </td>
         </tr>
         {% empty %}
-        <tr><td colspan="3">Aucun abonné.</td></tr>
+        <tr><td colspan="2">Aucun abonnés.</td></tr>
         {% endfor %}
     </table>
+
 </div>
 
 </body>

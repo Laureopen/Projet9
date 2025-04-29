@@ -25,9 +25,8 @@
     </div>
 </nav>
 <div class="form-container">
-    <h2>Liste des tickets</h2>
-    <a href="{% url 'create_ticket' %}" class="btn btn-success">
-        Créer un ticket
+    <h2>Flux</h2>
+    <a href="{% url 'create_ticket' %}" class="btn btn-success"> Demander une critique
     </a>
     {% for ticket in tickets %}
             {% if ticket.ordered_review_set.all|length == 0 %}
