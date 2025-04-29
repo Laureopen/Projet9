@@ -25,16 +25,15 @@
 </nav>
 
 <div class="form-container">
-    <h1>Modifier un ticket</h1>
 
     <!-- Formulaire avec bordure noire Bootstrap -->
     <div class="card border-dark mb-4">
-        <div class="card-header bg-dark text-white">Modifier un ticket</div>
+        <div class="card-header bg-dark text-white">Modifier votre ticket</div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ ticket_form.as_p }}
-                <button type="submit" class="btn btn-primary">Modifier le ticket</button>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
             </form>
         </div>
     </div>

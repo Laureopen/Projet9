@@ -41,7 +41,7 @@ $('#close-fullscreen-form').on('click', function () {
 <div class="fullscreen-form">
     <div class="form-box">
         <button id="close-fullscreen-form" class="close-btn">×</button>
-        Vous modifiez le ticket suivant :
+        Vous êtes en train de poster en réponse à :
         <h2>{{ ticket.title }}</h2>
         <p>{{ ticket.description }}</p>
         {% if ticket.image %}
@@ -52,12 +52,11 @@ $('#close-fullscreen-form').on('click', function () {
         {% csrf_token %}
 
         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-
+        <h1>Critique </h1>
         <div>
             <label for="id_headline">Titre :</label><br>
             {{ review_form.headline }}
         </div>
-
         <div>
             <label>Note :</label><br>
             <input type="hidden" name="rating" value="0" id="rating-value">
@@ -74,7 +73,7 @@ $('#close-fullscreen-form').on('click', function () {
         </div>
 
         <div>
-            <label for="id_body">Contenu :</label><br>
+            <label for="id_body">Commentaire :</label><br>
             {{ review_form.body }}
         </div>
 

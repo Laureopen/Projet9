@@ -32,7 +32,7 @@
             {% if ticket.ordered_review_set.all|length == 0 %}
                 {% if ticket.user != user %}
                     <div class="ticket-container border border-dark rounded p-3 mb-2">
-                    {{ ticket.user }} a posté
+                    {{ ticket.user }} a demandé une critique
                     <div class="row">
                         <div class="col-6"><p>{{ ticket.title }}</p></div>
                         <div class="col-6">{{ ticket.time_created }}</div>
@@ -41,7 +41,7 @@
                         <button class="btn btn-sm btn-primary review-button" data-ticket-id="{{ ticket.id }}"
                                 data-url="{% url 'create-review-for-ticket' ticket.id %}"
                                 {% if ticket.ordered_review_set|length > 0 or ticket.asked_review == False %} style="display:none" {% endif %}>
-                            {{ ticket.user }} a demandé une critique ✨
+                            créer une critique
                         </button>
                     </div>
                 {% else %}
