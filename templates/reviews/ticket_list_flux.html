@@ -28,6 +28,8 @@
     <h2>
     {% if request.resolver_match.view_name == 'posts' %}
         Posts
+    {% elif request.resolver_match.view_name == 'abonnements' %}
+        Abonnements
     {% else %}
         Flux
     {% endif %}
@@ -53,6 +55,7 @@
                     </div>
                 {% else %}
                 {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
+                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
                 {% endif %}
                 {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
                 <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">
@@ -69,9 +72,6 @@
                     {% if ticket.image %}
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
                     {% endif %}
-                    {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
-                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
-                    {% endif %}
 
                 </div>
                 {% endif %}
@@ -86,12 +86,6 @@
                     <h5>{{ ticket.title }}</h5>
                     {% if ticket.image %}
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
-                    {% endif %}
-                    {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
-                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
-                    {% endif %}
-                    {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
-                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-primary">Supprimer</a>
                     {% endif %}
                 </div>
             {% endif %}
