@@ -16,7 +16,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'posts' %}">Posts</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'abonnements' %}">Abonnements</a></li>
             </ul>
-            <form method="post" action="{% url'logout'%}">
+            <form method="post" action="{% url' logout '%}">
                 {% csrf_token %}
                 <button type="submit">logout</button>
             </form>
@@ -24,7 +24,6 @@
     </div>
 </nav>
     <h2>Vos posts</h2>
-
 
         <div class="post">
             {% if post.type == "critique" %}
@@ -57,8 +56,6 @@
         </div>
 
         <p>Vous n’avez encore publié aucun post.</p>
-
 </div>
-
 </body>
 </html>

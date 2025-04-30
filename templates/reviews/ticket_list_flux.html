@@ -26,8 +26,8 @@
 </nav>
 <div class="form-container">
     <h2>Flux</h2>
-    <a href="{% url 'create_ticket' %}" class="btn btn-success"> Demander une critique
-    </a>
+    <a href="{% url 'create_ticket' %}" class="btn btn-success"> Demander une critique</a>
+
     {% for ticket in tickets %}
             {% if ticket.ordered_review_set.all|length == 0 %}
                 {% if ticket.user != user %}
@@ -46,7 +46,6 @@
                     </div>
                 {% else %}
                 {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
-                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
                 {% endif %}
                 {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
                 <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">
@@ -63,6 +62,10 @@
                     {% if ticket.image %}
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
                     {% endif %}
+                    {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
+                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
+                    {% endif %}
+
                 </div>
                 {% endif %}
             {% else %}
@@ -76,6 +79,9 @@
                     <h5>{{ ticket.title }}</h5>
                     {% if ticket.image %}
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
+                    {% endif %}
+                    {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
+                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
                     {% endif %}
                 </div>
             {% endif %}
