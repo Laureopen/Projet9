@@ -26,18 +26,31 @@
 
 <div class="form-container">
 
-    <!-- Formulaire avec bordure noire Bootstrap -->
+    <!-- Formulaire de modification de review avec bordure noire -->
     <div class="card border-dark mb-4">
-        <div class="card-header bg-dark text-white">Supprimer votre review</div>
+        <div class="card-header bg-dark text-white">Modifier la critique</div>
         <div class="card-body">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <p>Êtes-vous sûr de vouloir supprimer la review : <strong>{{ review.headline }}</strong> ?</p>
-                <button type="submit" class="btn btn-danger">Supprimer</button>
+        <h1>Créer un ticket</h1>
 
-            </form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- TICKET -->
+            <label for="id_title">Titre :</label>
+            {{ ticket_form.title }}
+
+            <label for="id_description">Description :</label>
+            {{ ticket_form.description }}
+
+            <label for="id_image">Image :</label>
+            {{ ticket_form.image }}
+
+            <button type="submit">Envoyer</button>
+        </form>
         </div>
     </div>
 </div>
+
+
 </body>
 </html>

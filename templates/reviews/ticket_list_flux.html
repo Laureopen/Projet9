@@ -27,9 +27,7 @@
 <div class="form-container">
     <h2>
     {% if request.resolver_match.view_name == 'posts' %}
-        Posts
-    {% elif request.resolver_match.view_name == 'abonnements' %}
-        Abonnements
+         Vos Posts
     {% else %}
         Flux
     {% endif %}
@@ -45,7 +43,7 @@
             {% if ticket.ordered_review_set.all|length == 0 %}
                 {% if ticket.user != user %}
                     <div class="ticket-container border border-dark rounded p-3 mb-2">
-                    {{ ticket.user }} a demandé une critique
+                    {{ ticket.user }}  {% if ticket.asked_review == True %} a demandé une critique {% endif %}
                     <div class="row">
                         <div class="col-6"><p>{{ ticket.title }}</p></div>
                         <div class="col-6">{{ ticket.time_created }}</div>
@@ -60,6 +58,7 @@
                 {% else %}
                 {% if request.user == ticket.user and request.resolver_match.view_name == 'posts'%}
                         <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
+
                 {% endif %}
                 {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
                 <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">

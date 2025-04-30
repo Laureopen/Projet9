@@ -179,14 +179,29 @@ def subscriptions(request):
         'message': message,
     })
 
+
 @login_required
-def delete_ticket(request, ticket_id):
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
 
     if request.method == 'POST':
-        ticket.delete()
+        review.delete()
         return redirect('ticket-list')  # ou 'posts', selon le contexte
 
     return render(request, 'reviews/delete_review.html', {
-        'ticket': ticket
+        'review': review
+    })
+
+def create_ticket_only(request):
+    if request.method == 'POST':
+        ticket_form = TicketForm(request.POST, request.FILES)
+        if ticket_form.is_valid():
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect('posts')  # redirection après création
+    else:
+        ticket_form = TicketForm()
+    return render(request, 'reviews/create_ticket_only.html', {
+        'ticket_form': ticket_form
     })

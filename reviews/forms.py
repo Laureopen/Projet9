@@ -1,6 +1,5 @@
 from django import forms
-from .models import Ticket, Review, Post
-
+from .models import Ticket, Review
 
 class TicketForm(forms.ModelForm):
     class Meta:
@@ -23,13 +22,7 @@ class ReviewForm(forms.ModelForm):
     body = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control'}))
 
 
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['content']
-        widgets = {
-            'content': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Écris ton post ici...'})
-        }
+
 
 
 RATING_CHOICES = [(i, f"{i} étoile{'s' if i > 1 else ''}") for i in range(1, 6)]
