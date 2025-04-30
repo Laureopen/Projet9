@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
@@ -205,3 +206,24 @@ def create_ticket_only(request):
     return render(request, 'reviews/create_ticket_only.html', {
         'ticket_form': ticket_form
     })
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm-password']
+
+        if password != confirm_password:
+            messages.error(request, "Les mots de passe ne correspondent pas.")
+            return render(request, 'register.html')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Ce nom d'utilisateur est déjà pris.")
+            return render(request, 'register.html')
+
+        user = User.objects.create_user(username=username, password=password)
+        user.save()
+        return redirect('login')  # Redirige vers la page de login après inscription
+
+    return render(request, 'register.html')

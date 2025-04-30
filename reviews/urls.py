@@ -13,4 +13,5 @@ urlpatterns = [
     path('flux/', views.flux, name='flux'),
     path('posts/', views.my_ticket_list, name='posts'),
     path('abonnements/', views.subscriptions, name='abonnements'),
+    path('register/', views.register, name='register')
 ]
