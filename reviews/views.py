@@ -178,3 +178,15 @@ def subscriptions(request):
         'abonnes': abonnés,
         'message': message,
     })
+
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+
+    if request.method == 'POST':
+        ticket.delete()
+        return redirect('ticket-list')  # ou 'posts', selon le contexte
+
+    return render(request, 'reviews/delete_review.html', {
+        'ticket': ticket
+    })
