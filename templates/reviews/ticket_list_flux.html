@@ -25,7 +25,14 @@
     </div>
 </nav>
 <div class="form-container">
-    <h2>Flux</h2>
+    <h2>
+    {% if request.resolver_match.view_name == 'posts' %}
+        Posts
+    {% else %}
+        Flux
+    {% endif %}
+</h2>
+
     <a href="{% url 'create_ticket' %}" class="btn btn-success"> Demander une critique</a>
 
     {% for ticket in tickets %}
