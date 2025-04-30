@@ -35,7 +35,11 @@
     {% endif %}
 </h2>
 
-    <a href="{% url 'create_ticket' %}" class="btn btn-success"> Demander une critique</a>
+    {% if request.resolver_match.view_name == 'flux' %}
+    <a href="{% url 'create_ticket' %}" class="btn btn-success me-2">Demander une critique</a>
+    <a href="{% url 'create_ticket' %}" class="btn btn-primary">Créer une critique</a>
+{% endif %}
+
 
     {% for ticket in tickets %}
             {% if ticket.ordered_review_set.all|length == 0 %}
