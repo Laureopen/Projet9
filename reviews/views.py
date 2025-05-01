@@ -157,6 +157,17 @@ def subscriptions(request):
             to_unfollow = get_object_or_404(User, id=user_id)
             UserFollows.objects.filter(user=request.user, followed_user=to_unfollow).delete()
             message = f"Vous vous êtes désabonné de {to_unfollow.username}."
+
+        elif 'toggle_block_id' in request.POST:
+            user_id = request.POST.get('toggle_block_id')
+            try:
+                follow = UserFollows.objects.get(user_id=user_id, followed_user=request.user)
+                follow.is_blocked = not follow.is_blocked
+                follow.save()
+                message = f"{'Bloqué' if follow.is_blocked else 'Débloqué'} avec succès."
+            except UserFollows.DoesNotExist:
+                message = "Relation de suivi introuvable pour effectuer le blocage."
+
         else:
             username = request.POST.get('username')
             try:
@@ -172,13 +183,14 @@ def subscriptions(request):
                 message = "Utilisateur non trouvé."
 
     abonnements = request.user.following.select_related('followed_user')
-    abonnés = request.user.followers.select_related('user')
+    abonnes = request.user.followers.select_related('user')
 
     return render(request, 'reviews/subscriptions.html', {
         'abonnements': abonnements,
-        'abonnes': abonnés,
+        'abonnes': abonnes,
         'message': message,
     })
+
 
 
 @login_required

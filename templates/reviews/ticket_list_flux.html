@@ -34,7 +34,7 @@
 </h2>
 
     {% if request.resolver_match.view_name == 'flux' %}
-    <a href="{% url 'create_ticket' %}" class="btn btn-success me-2">Demander une critique</a>
+    <a href="{% url 'create_ticket_only' %}" class="btn btn-success me-2">Demander une critique</a>
     <a href="{% url 'create_ticket' %}" class="btn btn-primary">Créer une critique</a>
 {% endif %}
 
@@ -62,11 +62,11 @@
                 {% endif %}
                 {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
                 <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">
-                    Demander une review
+                    Demander une critique
                 </a>
                 {% elif request.resolver_match.view_name == 'posts' %}
                 <button class="btn btn-secondary" disabled>
-                    Review déjà demandée
+                    Critique déjà demandée
                 </button>
                 {% endif %}
                 <div class="ticket-container border border-dark rounded p-3 mb-2">
@@ -80,17 +80,49 @@
                 {% endif %}
             {% else %}
                 <div class="ticket-container border border-dark rounded p-3 mb-2">
-                <p>Vous avez publié une critique</p>
-                {% for review in ticket.ordered_review_set.all %}
-                    {% include 'reviews/single_review.html' %}
-                {% endfor %}
-                <div class="ticket-container border border-dark rounded p-3 mb-2">
-                    <strong>Ticket - {{ ticket.user }}</strong>
-                    <h5>{{ ticket.title }}</h5>
-                    {% if ticket.image %}
-                        <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
-                    {% endif %}
-                </div>
+    <!-- Affichage des critiques liées à ce ticket (en premier) -->
+    {% for review in ticket.ordered_review_set.all %}
+        <div class="review-container border border-secondary rounded p-3 mb-2">
+            {% if review.user == request.user %}
+                <p><strong>Vous avez publié une critique</strong></p>
+            {% else %}
+                <p><strong>{{ review.user.username }} a publié une critique</strong></p>
+            {% endif %}
+
+            <p>
+                <strong></strong>
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+            <span style="color: gold;">&#9733;</span>  {# étoile pleine #}
+        {% else %}
+            <span style="color: lightgray;">&#9733;</span>  {# étoile vide #}
+        {% endif %}
+    {% endfor %}
+
+    </p>
+            <p><strong></strong> {{ review.headline }}</p>
+            <p><strong></strong> {{ review.body }}</p>
+
+            <!-- Boutons seulement si l'utilisateur connecté est l'auteur -->
+            {% if review.user == request.user %}
+                <a href="{% url 'edit_review' review.id %}" class="btn btn-primary btn-sm">Modifier</a>
+                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>Aucune critique n'a encore été publiée pour ce ticket.</p>
+    {% endfor %}
+
+    <!-- Affichage du ticket (en dernier) -->
+    <div class="ticket-container border border-dark rounded p-3 mt-2">
+        <p><strong>Ticket - {{ ticket.user.username }}</strong></p>
+        <h5>{{ ticket.title }}</h5>
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
+        {% endif %}
+    </div>
+</div>
+
             {% endif %}
         </div>
         <div class="review-form-container" id="review-form-{{ ticket.id }}"></div>
@@ -99,3 +131,6 @@
     {% endfor %}
 </div>
 </html>
+
+
+
