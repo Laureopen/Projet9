@@ -147,40 +147,53 @@ def create_review_for_ticket(request, ticket_id):
 
 
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.models import User
+from .models import UserFollows
+
 @login_required
 def subscriptions(request):
-    message = ""
-
     if request.method == 'POST':
         if 'unfollow_id' in request.POST:
             user_id = request.POST.get('unfollow_id')
             to_unfollow = get_object_or_404(User, id=user_id)
             UserFollows.objects.filter(user=request.user, followed_user=to_unfollow).delete()
-            message = f"Vous vous êtes désabonné de {to_unfollow.username}."
+            messages.success(request, f"Vous vous êtes désabonné de {to_unfollow.username}.")
 
         elif 'toggle_block_id' in request.POST:
             user_id = request.POST.get('toggle_block_id')
             try:
-                follow = UserFollows.objects.get(user_id=user_id, followed_user=request.user)
-                follow.is_blocked = not follow.is_blocked
-                follow.save()
-                message = f"{'Bloqué' if follow.is_blocked else 'Débloqué'} avec succès."
+                user_to_toggle = User.objects.get(id=user_id)
+
+                if user_to_toggle == request.user:
+                    messages.error(request, "Vous ne pouvez pas vous bloquer vous-même.")
+                else:
+                    follow = UserFollows.objects.get(user=user_to_toggle, followed_user=request.user)
+                    follow.is_blocked = not follow.is_blocked
+                    follow.save()
+                    action = "bloqué" if follow.is_blocked else "débloqué"
+                    messages.success(request, f"Utilisateur {user_to_toggle.username} {action} avec succès.")
+
+            except User.DoesNotExist:
+                messages.error(request, "Utilisateur introuvable.")
             except UserFollows.DoesNotExist:
-                message = "Relation de suivi introuvable pour effectuer le blocage."
+                messages.error(request, "Relation de suivi introuvable pour effectuer le blocage.")
 
         else:
             username = request.POST.get('username')
             try:
                 to_follow = User.objects.get(username=username)
                 if to_follow == request.user:
-                    message = "Vous ne pouvez pas vous abonner à vous-même."
+                    messages.error(request, "Vous ne pouvez pas vous abonner à vous-même.")
                 elif UserFollows.objects.filter(user=request.user, followed_user=to_follow).exists():
-                    message = "Vous êtes déjà abonné à cet utilisateur."
+                    messages.warning(request, "Vous êtes déjà abonné à cet utilisateur.")
                 else:
                     UserFollows.objects.create(user=request.user, followed_user=to_follow)
-                    message = f"Abonnement à {to_follow.username} réussi."
+                    messages.success(request, f"Abonnement à {to_follow.username} réussi.")
             except User.DoesNotExist:
-                message = "Utilisateur non trouvé."
+                messages.error(request, "Utilisateur non trouvé.")
 
     abonnements = request.user.following.select_related('followed_user')
     abonnes = request.user.followers.select_related('user')
@@ -188,7 +201,6 @@ def subscriptions(request):
     return render(request, 'reviews/subscriptions.html', {
         'abonnements': abonnements,
         'abonnes': abonnes,
-        'message': message,
     })
 
 

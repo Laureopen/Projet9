@@ -24,6 +24,24 @@
     </div>
 </nav>
 
+
+
+
+
+<div class="container mt-3">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+
+
+
+
+
+
 <div class="form-container">
 <h2>Suivre d'autres utilisateurs</h2>
 
@@ -59,27 +77,28 @@
         {% endfor %}
     </table>
 
-    <h3>Abonnés</h3>
+  <h3>Abonnés</h3>
 <table class="table table-bordered">
     {% for follow in abonnes %}
-    <tr>
-        <td>{{ follow.followed_user.username }}</td>
-        <td>
-            <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="toggle_block_id" value="{{ follow.followed_user.id }}">
-                {% if follow.is_blocked %}
-                    <button type="submit" class="btn btn-sm btn-success">Débloquer</button>
-                {% else %}
-                    <button type="submit" class="btn btn-sm btn-danger">Bloquer</button>
-                {% endif %}
-            </form>
-        </td>
-    </tr>
+        <tr>
+            <td>{{ follow.user.username }}</td>
+            <td>
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="toggle_block_id" value="{{ follow.user.id }}">
+                    {% if follow.is_blocked %}
+                        <button type="submit" class="btn btn-sm btn-success">Débloquer</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-sm btn-danger">Bloquer</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
     {% empty %}
-    <tr><td colspan="2">Aucun abonnés.</td></tr>
+        <tr><td colspan="2">Aucun abonné.</td></tr>
     {% endfor %}
 </table>
+
 
 
 </div>
