@@ -26,8 +26,8 @@
 </nav>
 
     <h1>Connectez-vous</h1>
-
-    <section aria-labelledby="login-heading">
+    <div class="row"><div class="col-6">
+        <section aria-labelledby="login-heading">
         <form method="POST" action="{% url 'login' %}" aria-describedby="form-description">
             {% csrf_token %}
 
@@ -35,16 +35,18 @@
             <input type="password" id="password" name="password" required aria-required="true"><br>
             <button type="submit">Se connecter</button><br>
         </form>
-
     </section>
 
-    <div class="container">
-        <section class="signup" aria-labelledby="signup-heading">
+
+
+    </div><div class="col-6">
+         <section class="signup" aria-labelledby="signup-heading">
             <h2 id="signup-heading">Inscrivez-vous maintenant</h2>
             <a href="{% url 'register' %}" title="Page d'inscription">
                 <button>S'inscrire</button>
             </a>
         </section>
-    </div>
+    </div></div>
+
 </body>
 </html>

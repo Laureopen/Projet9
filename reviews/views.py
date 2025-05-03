@@ -32,7 +32,7 @@ def my_ticket_list(request):
 @login_required
 def flux(request):
     # Récupérer les IDs des utilisateurs suivis
-    followed_users_ids = UserFollows.objects.filter(user=request.user).values_list('followed_user_id', flat=True)
+    followed_users_ids = UserFollows.objects.filter(user=request.user, is_blocked=False).values_list('followed_user_id', flat=True)
 
     # Tickets de moi + des gens que je suis
     tickets = Ticket.objects.filter(
@@ -144,14 +144,6 @@ def create_review_for_ticket(request, ticket_id):
         'review_form': review_form,
         'ticket': ticket,
     })
-
-
-
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.models import User
-from .models import UserFollows
 
 @login_required
 def subscriptions(request):
