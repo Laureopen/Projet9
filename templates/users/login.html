@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">LITReview</a>
+        <a class="navbar-brand" href="{% url 'login' %}">LITReview</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'flux' %}">Flux</a></li>
@@ -25,9 +25,22 @@
     </div>
 </nav>
 
-    <h1>Connectez-vous</h1>
+
     <div class="row"><div class="col-6">
+         <section class="signup" aria-labelledby="signup-heading">
+            <h2 id="signup-heading">Inscrivez-vous maintenant</h2>
+            <a href="{% url 'register' %}" title="Page d'inscription">
+                <button>S'inscrire</button>
+            </a>
+        </section>
+
+
+
+
+
+    </div><div class="col-6">
         <section aria-labelledby="login-heading">
+             <h1>Connectez-vous</h1>
         <form method="POST" action="{% url 'login' %}" aria-describedby="form-description">
             {% csrf_token %}
 
@@ -37,15 +50,6 @@
         </form>
     </section>
 
-
-
-    </div><div class="col-6">
-         <section class="signup" aria-labelledby="signup-heading">
-            <h2 id="signup-heading">Inscrivez-vous maintenant</h2>
-            <a href="{% url 'register' %}" title="Page d'inscription">
-                <button>S'inscrire</button>
-            </a>
-        </section>
     </div></div>
 
 </body>
