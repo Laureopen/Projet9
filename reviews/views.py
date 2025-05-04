@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
@@ -18,9 +18,11 @@ def ask_review(request, ticket_id):
     ticket.save()
     return redirect('posts')
 
+
 def ticket_list(request):
     tickets = Ticket.objects.all().order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
+
 
 @login_required
 def my_ticket_list(request):
@@ -29,10 +31,12 @@ def my_ticket_list(request):
     tickets = (tickets_created | tickets_reviewed).distinct().order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
+
 @login_required
 def flux(request):
     # Récupérer les IDs des utilisateurs suivis
-    followed_users_ids = UserFollows.objects.filter(user=request.user, is_blocked=False).values_list('followed_user_id', flat=True)
+    followed_users_ids = (UserFollows.objects.filter(user=request.user, is_blocked=False).values_list
+                          ('followed_user_id', flat=True))
 
     # Tickets de moi + des gens que je suis
     tickets = Ticket.objects.filter(
@@ -40,6 +44,7 @@ def flux(request):
     ).order_by('-time_created')
 
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
+
 
 def subscriptions_ticket_list(request):
     tickets = Ticket.objects.all()
@@ -159,6 +164,7 @@ def create_review_for_ticket(request, ticket_id):
         'ticket': ticket,
     })
 
+
 @login_required
 def subscriptions(request):
     if request.method == 'POST':
@@ -210,7 +216,6 @@ def subscriptions(request):
     })
 
 
-
 @login_required
 def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
@@ -222,6 +227,7 @@ def delete_review(request, review_id):
     return render(request, 'reviews/delete_review.html', {
         'review': review
     })
+
 
 def create_ticket_only(request):
     if request.method == 'POST':

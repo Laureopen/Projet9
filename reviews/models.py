@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db import models
+
 
 class Ticket(models.Model):
     """
@@ -19,10 +19,8 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.title} - {self.user}"
 
-
     def ordered_review_set(self):
         return self.review_set.all().order_by('-time_created')
-
 
 
 class Review(models.Model):
@@ -52,5 +50,3 @@ class UserFollows(models.Model):
 
     class Meta:
         unique_together = ('user', 'followed_user')
-
-
