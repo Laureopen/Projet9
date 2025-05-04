@@ -48,12 +48,12 @@ LITRevu est une start-up innovante qui souhaite lancer une application web perme
  
    python manage.py createsuperuser
 
-## Etape 8: Lance ton serveur de développement
+## Etape 8: Lancer le serveur de développement
 
    python manage.py runserver
 
 
-## Etape 9: Accède à l'application dans ton navigateur
+## Etape 9: Accéder à l'application dans ton navigateur
 
    http://127.0.0.1:8000/
 
