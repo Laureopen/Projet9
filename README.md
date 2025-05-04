@@ -40,20 +40,21 @@ LITRevu est une start-up innovante qui souhaite lancer une application web perme
 
 - **Installer** :django : pip install django
 
-## Etape 6: Lancer les migrations de la base de données
+## Etape 6: Mettre les migrations de la base de données
 
-   python manage.py migrate
+    python manage.py makemigrations
+   
+    python manage.py migrate
 
 ## Etape 7: Créer un superutilisateur (admin)
  
-   python manage.py createsuperuser
+    python manage.py createsuperuser
 
 ## Etape 8: Lancer le serveur de développement
 
-   python manage.py runserver
+    python manage.py runserver
 
-
-## Etape 9: Accéder à l'application dans ton navigateur
+## Etape 9: Accéder à l'application dans le navigateur
 
    http://127.0.0.1:8000/
 
