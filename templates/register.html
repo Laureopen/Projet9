@@ -23,34 +23,31 @@
         </div>
     </div>
 </nav>
-<div class="form-container">
-<body>
-    <main class="login-wrapper">
-        <section class="login-box" aria-labelledby="register-title">
-            <h1 id="register-title">Inscrivez-vous</h1>
-            <form method="POST" action="{% url 'register' %}">
-                {% csrf_token %}
-
-                 <label for="username">Nom d'utilisateur</label>
-                  <input type="text" id="username" name="username" required>
-
-                  <label for="password">Mot de passe</label>
-                  <input type="password" id="password" name="password" required>
-
-                  <label for="confirm-password">Confirmer mot de passe</label>
-                  <input type="password" id="confirm-password" name="confirm-password" required>
-
-                  <button type="submit">S'inscrire</button>
-            </form>
-
-            <div class="signup-redirect">
-                <a href="{% url 'login' %}" title="Retour à la page de connexion">
-                    <button class="btn-secondary">Retourner</button>
-
-                </a>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="border border-dark p-4 rounded">
+        <h1 class="text-center mb-4">Inscrivez-vous</h1>
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" class="form-control" required>
             </div>
-        </section>
-    </main>
-</body>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">Confirmer mot de passe</label>
+                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+        </form>
+        <div class="mt-3 text-center">
+            <a href="{% url 'login' %}" title="Retour à la page de connexion">
+                <button class="btn btn-secondary">Retourner</button>
+            </a>
+        </div>
+    </div>
+</div>
 </body>
 </html>
