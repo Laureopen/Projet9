@@ -25,29 +25,36 @@
     </div>
 </nav>
 
+<div class="container border border-dark p-4 rounded">
+    <div class="row">
+        <div class="col-6">
+            <section class="signup" aria-labelledby="signup-heading">
+                <h2 id="signup-heading">Inscrivez-vous maintenant</h2>
+                <a href="{% url 'register' %}" title="Page d'inscription">
+                    <button>S'inscrire</button>
+                </a>
+            </section>
+        </div>
+        <div class="col-6">
+            <section aria-labelledby="login-heading">
+                <h1>Connectez-vous</h1>
+                <form method="POST" action="{% url 'login' %}" aria-describedby="form-description">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" id="username" name="username" required aria-required="true" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" id="password" name="password" required aria-required="true" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
 
-    <div class="row"><div class="col-6">
-         <section class="signup" aria-labelledby="signup-heading">
-            <h2 id="signup-heading">Inscrivez-vous maintenant</h2>
-            <a href="{% url 'register' %}" title="Page d'inscription">
-                <button>S'inscrire</button>
-            </a>
-        </section>
-
-
-    </div><div class="col-6">
-        <section aria-labelledby="login-heading">
-             <h1>Connectez-vous</h1>
-        <form method="POST" action="{% url 'login' %}" aria-describedby="form-description">
-            {% csrf_token %}
-
-            <input type="text" id="username" name="username" required aria-required="true"><br>
-            <input type="password" id="password" name="password" required aria-required="true"><br>
-            <button type="submit">Se connecter</button><br>
-        </form>
-    </section>
-
-    </div></div>
 
 </body>
 </html>
