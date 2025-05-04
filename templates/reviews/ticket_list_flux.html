@@ -119,6 +119,15 @@
         <h5>{{ ticket.title }}</h5>
         {% if ticket.image %}
             <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
+
+       {% if ticket.user == request.user %}
+    <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
+    <form action="{% url 'delete_ticket' ticket.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+    </form>
+{% endif %}
+
         {% endif %}
     </div>
 </div>

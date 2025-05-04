@@ -91,6 +91,20 @@ def edit_ticket(request, ticket_id):
         'ticket': ticket
     })
 
+
+@login_required
+def delete_ticket(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        review.delete()
+        return redirect('ticket-list')  # ou 'posts', selon le contexte
+
+    return render(request, 'reviews/delete_ticket.html', {
+        'review': review
+    })
+
+
 @login_required
 def edit_review(request, review_id):
     # Récupérer la review avec l'ID, et la lier à l'utilisateur connecté
