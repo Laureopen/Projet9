@@ -19,16 +19,9 @@ def ask_review(request, ticket_id):
     return redirect('posts')
 
 
-def ticket_list(request):
-    tickets = Ticket.objects.all().order_by('-time_created')
-    return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
-
-
 @login_required
 def my_ticket_list(request):
-    tickets_created = Ticket.objects.filter(user=request.user)
-    tickets_reviewed = Ticket.objects.filter(review__user=request.user)
-    tickets = (tickets_created | tickets_reviewed).distinct().order_by('-time_created')
+    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 
@@ -68,7 +61,7 @@ def create_ticket(request):
                 review.user = request.user
                 review.save()
 
-            return redirect('ticket-list')
+            return redirect('flux')
     else:
         ticket_form = TicketForm()
         review_form = ReviewForm()
@@ -87,7 +80,7 @@ def edit_ticket(request, ticket_id):
         ticket_form = TicketForm(request.POST, request.FILES, instance=ticket)
         if ticket_form.is_valid():
             ticket_form.save()
-            return redirect('ticket-list')  # Redirection après modification
+            return redirect('flux')  # Redirection après modification
     else:
         ticket_form = TicketForm(instance=ticket)
 
@@ -98,15 +91,15 @@ def edit_ticket(request, ticket_id):
 
 
 @login_required
-def delete_ticket(request, review_id):
-    review = get_object_or_404(Review, id=review_id, user=request.user)
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == 'POST':
-        review.delete()
-        return redirect('ticket-list')  # ou 'posts', selon le contexte
+        ticket.delete()
+        return redirect('flux')  # ou 'posts', selon le contexte
 
     return render(request, 'reviews/delete_ticket.html', {
-        'review': review
+        'ticket': ticket
     })
 
 
@@ -120,7 +113,7 @@ def edit_review(request, review_id):
 
         if review_form.is_valid():
             review_form.save()  # Sauvegarder la review mise à jour
-            return redirect('ticket-list')  # Redirection après modification
+            return redirect('flux')  # Redirection après modification
     else:
         review_form = ReviewForm(instance=review)
 
@@ -147,7 +140,7 @@ def create_review_for_ticket(request, ticket_id):
                 html = render_to_string('reviews/single_review.html', {'review': review})
                 return JsonResponse({'html': html})
 
-            return redirect('ticket-list')
+            return redirect('flux')
 
     else:
         review_form = ReviewForm()
@@ -222,7 +215,7 @@ def delete_review(request, review_id):
 
     if request.method == 'POST':
         review.delete()
-        return redirect('ticket-list')  # ou 'posts', selon le contexte
+        return redirect('flux')  # ou 'posts', selon le contexte
 
     return render(request, 'reviews/delete_review.html', {
         'review': review

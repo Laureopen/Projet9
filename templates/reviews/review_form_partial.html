@@ -32,6 +32,22 @@
     color: #333;
     cursor: pointer;
 }
+.rating input[type="radio"] {
+    display: none; /* on cache les boutons radio */
+}
+
+.rating label {
+    color: #ccc;
+    font-size: 2em;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating input[type="radio"]:checked + label,
+.rating input[type="radio"]:checked + label ~ label {
+    color: gold;
+}
+
 </style>
 <script>
 $('#close-fullscreen-form').on('click', function () {
@@ -66,7 +82,7 @@ $('#close-fullscreen-form').on('click', function () {
                     <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
                     {% if review_form.rating.value == i %}checked{% endif %}
                     onclick="updateRating({{ i }})">
-                <label for="star{{ i }}" title="{{ i }} étoiles">★</label>
+                <label for="star{{ i }}" title="{{ i }} étoiles">&#9733;</label>
                 {% endfor %}
             </div>
 

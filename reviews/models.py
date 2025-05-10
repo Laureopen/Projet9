@@ -20,7 +20,15 @@ class Ticket(models.Model):
         return f"{self.title} - {self.user}"
 
     def ordered_review_set(self):
-        return self.review_set.all().order_by('-time_created')
+        # Affiche les utilisateurs qui suivent l'utilisateur courant
+        followers_not_blocked = self.user.followers.filter(is_blocked=False).values_list('user', flat=True)
+
+        # Filtrer les critiques où l'auteur fait partie des followers non bloqués
+        # et où le ticket appartient à l'utilisateur courant
+        return self.review_set.filter(
+            user__in=followers_not_blocked,  # Utilisateurs qui suivent et ne sont pas bloqués
+            ticket__user=self.user  # Le ticket doit être créé par l'utilisateur courant
+        ).order_by('-time_created')  # Tri des critiques de la plus récente à la plus ancienne
 
 
 class Review(models.Model):
