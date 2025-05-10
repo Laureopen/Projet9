@@ -1,4 +1,6 @@
 {% load static %}
+{% load l10n %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -89,13 +91,11 @@
                         <div class="review-header">
                             <div>
                                 {% if review.user == request.user %}
-                                    <p><strong>Vous avez publié une critique</strong></p>
+                                    <p><strong>Vous avez publié une critique</strong><div class="text-end>">{{ review.time_created|date:"H:i, j F Y"}}</div>
                                 {% else %}
-                                    <p><strong>{{ review.user.username }} a publié une critique</strong></p>
+                                    <p><strong>{{ review.user.username }} a publié une critique</strong><div class="text-end>">{{ review.time_created|date:"H:i, j F Y"}}</div>
                                 {% endif %}
-                            </div>
-                            <div>
-                                <p>{{ review.time_created|date:"M d, Y, h:i a" }}</p>
+                                <p>{{ review.time_created|date:"H:i, j F Y" }}</p>
                             </div>
                         </div>
 
