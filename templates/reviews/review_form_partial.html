@@ -11,7 +11,6 @@
     align-items: center;
     justify-content: center;
 }
-
 .form-box {
     background: white;
     padding: 2em;
@@ -21,7 +20,6 @@
     width: 90%;
     max-width: 600px;
 }
-
 .close-btn {
     position: absolute;
     top: 0.5em;
@@ -32,22 +30,23 @@
     color: #333;
     cursor: pointer;
 }
-.rating input[type="radio"] {
-    display: none; /* on cache les boutons radio */
+.rating {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    font-size: 1.5em;
 }
-
+.rating input {
+    display: none;
+}
 .rating label {
-    color: #ccc;
-    font-size: 2em;
+    color: lightgray;
     cursor: pointer;
-    transition: color 0.2s;
 }
-
-.rating input[type="radio"]:checked + label,
-.rating input[type="radio"]:checked + label ~ label {
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
     color: gold;
 }
-
 </style>
 <script>
 $('#close-fullscreen-form').on('click', function () {
@@ -63,36 +62,30 @@ $('#close-fullscreen-form').on('click', function () {
         {% if ticket.image %}
             <img src="{{ ticket.image.url }}" alt="Image du ticket" class="m-4" style="max-width: 200px;">
         {% endif %}
-
         <form method="post" class="ajax-review-form border border-dark rounded p-3 mb-2" action="{% url 'create-review-for-ticket' ticket.id %}">
         {% csrf_token %}
-
         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
         <h1>Critique </h1>
         <div>
-            <label for="id_headline">Titre :</label><br>
+            <label for="id_headline">Titre :</label>
             {{ review_form.headline }}
         </div>
         <div>
-            <label>Note :</label><br>
-            <input type="hidden" name="rating" value="0" id="rating-value">
-
-            <div class="rating">
-                {% for i in "54321" %}
-                    <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
-                    {% if review_form.rating.value == i %}checked{% endif %}
-                    onclick="updateRating({{ i }})">
-                <label for="star{{ i }}" title="{{ i }} étoiles">&#9733;</label>
-                {% endfor %}
-            </div>
-
-        </div>
-
+    <label>Note :</label>
+    <input type="hidden" name="rating" value="0" id="rating-value">
+    <div class="rating">
+        {% for i in "12345" %}
+            <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                   {% if review_form.rating.value|stringformat:"s" == i %}checked{% endif %}
+                   onclick="updateRating({{ i }})">
+            <label for="star{{ i }}" title="{{ i }} étoiles">&#9733;</label>
+        {% endfor %}
+    </div>
+</div>
         <div>
-            <label for="id_body">Commentaire :</label><br>
+            <label for="id_body">Commentaire :</label>
             {{ review_form.body }}
         </div>
-
         <div>
             <button type="submit">Envoyer</button>
         </div>

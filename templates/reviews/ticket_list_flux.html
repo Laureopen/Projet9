@@ -148,7 +148,7 @@
 
                     {% if ticket.user == request.user %}
                     <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">toto</a>
+                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     {% endif %}
                 </div>
             </div>
