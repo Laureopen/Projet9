@@ -81,6 +81,9 @@
                 </div>
             {% else %}
                 <div class="ticket-container border border-dark rounded p-3 mb-2">
+                    <div class="col-2">
+                        <div class="text-end>">{{ review.time_created|date:"H:i, j F Y"}}</div>
+                    </div>
                     <strong>Ticket - {{ ticket.user }}</strong>
                     <h5>{{ ticket.title }}</h5>
                     {% if ticket.image %}
