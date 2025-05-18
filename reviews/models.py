@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db import models
-
+from django.db.models import Q
 
 class Ticket(models.Model):
     """
@@ -22,11 +22,10 @@ class Ticket(models.Model):
     def ordered_review_set(self):
         # Affiche les utilisateurs qui suivent l'utilisateur courant
         followers_not_blocked = self.user.followers.filter(is_blocked=False).values_list('user', flat=True)
-
         # Filtrer les critiques où l'auteur fait partie des followers non bloqués
         # et où le ticket appartient à l'utilisateur courant
         return self.review_set.filter(
-            user__in=followers_not_blocked,  # Utilisateurs qui suivent et ne sont pas bloqués
+            Q(user__in=followers_not_blocked) | Q(user=self.user),
             ticket__user=self.user  # Le ticket doit être créé par l'utilisateur courant
         ).order_by('-time_created')  # Tri des critiques de la plus récente à la plus ancienne
 

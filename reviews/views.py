@@ -18,12 +18,10 @@ def ask_review(request, ticket_id):
     ticket.save()
     return redirect('posts')
 
-
 @login_required
 def my_ticket_list(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by('-time_created')
+    tickets = Ticket.objects.filter(Q(user=request.user)|Q(review__user=request.user)).order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
-
 
 @login_required
 def flux(request):
