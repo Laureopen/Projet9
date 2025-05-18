@@ -34,28 +34,15 @@
 </nav>
 
 <div class="form-container">
-    <h1>Modifier la critique</h1>
 
-    <!-- Formulaire de modification de review avec bordure noire -->
+    <!-- Formulaire avec bordure noire Bootstrap -->
     <div class="card border-dark mb-4">
-        <div class="card-header bg-dark text-white">Modifier la critique</div>
+        <div class="card-header bg-dark text-white">Supprimer votre ticket</div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <!-- Formulaire de review -->
-                <div class="mb-3">
-                    <label for="id_headline" class="form-label">Titre de la critique :</label>
-                    {{ review_form.headline }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_rating" class="form-label">Note :</label>
-                    {{ review_form.rating }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_body" class="form-label">Contenu :</label>
-                    {{ review_form.body }}
-                </div>
-                <button type="submit" class="btn btn-primary">Modifier la critique</button>
+                <p>Êtes-vous sûr de vouloir supprimer le ticket : <strong>{{ review.headline }}</strong> ?</p>
+                <button type="submit" class="btn btn-danger">Supprimer</button>
             </form>
         </div>
     </div>

@@ -98,7 +98,7 @@ def delete_ticket(request, ticket_id):
         ticket.delete()
         return redirect('flux')  # ou 'posts', selon le contexte
 
-    return render(request, 'reviews/delete_ticket.html', {
+    return render(request, 'ticket/delete_ticket.html', {
         'ticket': ticket
     })
 
