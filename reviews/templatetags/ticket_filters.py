@@ -8,7 +8,7 @@ def can_be_reviewed_by(ticket, user):
     if not user.is_authenticated:
         return False
     return UserFollows.objects.filter(
-        user=ticket.user,
-        followed_user=user,
+        user=user,
+        followed_user=ticket.user,
         is_blocked=False
     ).exists()
