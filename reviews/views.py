@@ -98,10 +98,9 @@ def delete_ticket(request, ticket_id):
         ticket.delete()
         return redirect('flux')  # ou 'posts', selon le contexte
 
-    return render(request, 'ticket/delete_ticket.html', {
+    return render(request, 'reviews/delete_ticket.html', {
         'ticket': ticket
     })
-
 
 @login_required
 def edit_review(request, review_id):

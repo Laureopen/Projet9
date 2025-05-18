@@ -91,11 +91,8 @@
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
                     {% endif %}
                     {% if ticket.user == request.user %}
-                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
-                        <form action="{% url 'delete_ticket' ticket.id %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+                    <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">toto</a>
                     {% endif %}
                 </div>
             {% endif %}
@@ -154,11 +151,8 @@
                     {% endif %}
 
                     {% if ticket.user == request.user %}
-                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
-                        <form action="{% url 'delete_ticket' ticket.id %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+                    <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">toto</a>
                     {% endif %}
                 </div>
             </div>
