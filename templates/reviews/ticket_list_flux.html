@@ -1,5 +1,6 @@
 {% load static %}
 {% load l10n %}
+{% load ticket_filters %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -68,7 +69,7 @@
                         <button class="btn btn-sm btn-primary review-button"
                                 data-ticket-id="{{ ticket.id }}"
                                 data-url="{% url 'create-review-for-ticket' ticket.id %}"
-                                {% if ticket.ordered_review_set|length > 0 or not ticket.asked_review %} style="display:none" {% endif %}>
+                                {% if ticket.ordered_review_set|length > 0 and ticket|can_be_reviewed_by:request.user %} style="display:none" {% endif %}>
                             créer une critique
                         </button>
                     </div>

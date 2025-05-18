@@ -28,7 +28,7 @@ def my_ticket_list(request):
 @login_required
 def flux(request):
     # Récupérer les IDs des utilisateurs suivis
-    followed_users_ids = (UserFollows.objects.filter(user=request.user, is_blocked=False).values_list
+    followed_users_ids = (UserFollows.objects.filter(user=request.user).values_list
                           ('followed_user_id', flat=True))
 
     # Tickets de moi + des gens que je suis
