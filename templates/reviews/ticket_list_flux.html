@@ -58,33 +58,28 @@
             {% if ticket.user != user %}
                 <div class="ticket-container border border-dark rounded p-3 mb-2">
                     {{ ticket.user }}
-                    {% if ticket.asked_review %}
+                    {% if ticket|can_be_reviewed_by:request.user %}
                         a demandé une critique
                     {% endif %}
                     <div class="row">
-                        <div class="col-6"><p>{{ ticket.title }}</p></div>
-                        <div class="col-6">{{ ticket.time_created }}</div>
+                        <div class="col-10"><p>{{ ticket.title }}</p></div>
+                        <div class="col-2">{{ ticket.time_created }}</div>
                     </div>
+                    {% if ticket.image %}
+                        <img class= "m-2" src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
+                    {% endif %}
+                    {% if ticket|can_be_reviewed_by:request.user %}
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <button class="btn btn-sm btn-primary review-button"
                                 data-ticket-id="{{ ticket.id }}"
                                 data-url="{% url 'create-review-for-ticket' ticket.id %}"
-                                {% if ticket.ordered_review_set|length > 0 and ticket|can_be_reviewed_by:request.user %} style="display:none" {% endif %}>
+                                {% if ticket.ordered_review_set|length > 0 %} style="display:none" {% endif %}>
                             créer une critique
                         </button>
                     </div>
+                    {% endif %}
                 </div>
             {% else %}
-                {% if request.user == ticket.user and request.resolver_match.view_name == 'posts' %}
-                    <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary">Modifier</a>
-                {% endif %}
-
-                {% if not ticket.asked_review and request.resolver_match.view_name == 'posts' %}
-                    <a href="{% url 'ask_review' ticket.id %}" class="btn btn-primary">Demander une critique</a>
-                {% elif request.resolver_match.view_name == 'posts' %}
-                    <button class="btn btn-secondary" disabled>Critique déjà demandée</button>
-                {% endif %}
-
                 <div class="ticket-container border border-dark rounded p-3 mb-2">
                     <strong>Ticket - {{ ticket.user }}</strong>
                     <h5>{{ ticket.title }}</h5>
@@ -92,8 +87,8 @@
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
                     {% endif %}
                     {% if ticket.user == request.user %}
-                    <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">toto</a>
+                        <a href="{% url 'edit_ticket' ticket.id %}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     {% endif %}
                 </div>
             {% endif %}
