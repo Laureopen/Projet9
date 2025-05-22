@@ -142,9 +142,17 @@
                     <p>Aucune critique n'a encore été publiée pour ce ticket.</p>
                 {% endfor %}
 
-                <div class="ticket-container border border-dark rounded p-3 mt-2">
-                    <p><strong>Ticket - {{ ticket.user.username }}</strong></p>
-                    <h5>{{ ticket.title }}</h5>
+                    <div class="ticket-container border border-dark rounded p-3 mt-2">
+                    <div class="row">
+                    <div class="col-10">
+                        <strong>Ticket - {{ ticket.user }}</strong>
+                        <h5>{{ ticket.title }}</h5>
+                    </div>
+                    <div class="col-2">
+                        <div class="text-end>">{{ ticket.time_created|date:"H:i, j F Y"}}</div>
+                    </div>
+                </div>
+
                     {% if ticket.image %}
                         <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width: 200px;">
                     {% endif %}
