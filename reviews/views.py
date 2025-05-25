@@ -12,13 +12,6 @@ from .models import Ticket, UserFollows, Review
 
 
 @login_required
-def ask_review(request, ticket_id):
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-    ticket.asked_review = True
-    ticket.save()
-    return redirect('posts')
-
-@login_required
 def my_ticket_list(request):
     tickets = Ticket.objects.filter(Q(user=request.user)|Q(review__user=request.user)).order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
