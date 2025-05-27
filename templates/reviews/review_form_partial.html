@@ -74,7 +74,7 @@ $('#close-fullscreen-form').on('click', function () {
     <label>Note :</label>
     <input type="hidden" name="rating" value="0" id="rating-value">
     <div class="rating">
-        {% for i in "12345" %}
+        {% for i in "54321" %}
             <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
                    {% if review_form.rating.value|stringformat:"s" == i %}checked{% endif %}
                    onclick="updateRating({{ i }})">
