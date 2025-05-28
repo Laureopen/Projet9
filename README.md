@@ -6,7 +6,7 @@ LITRevu est une start-up innovante qui souhaite lancer une application web perme
 # Installation:
 # Prérequis
 
-* Python 3 installé sur votre machine 
+* Python 3.10.11 installé sur votre machine 
 * Virtualenv installé sur votre machine
 * Django installé sur votre machine
 
@@ -36,25 +36,21 @@ LITRevu est une start-up innovante qui souhaite lancer une application web perme
 
     pip install -r requirements.txt
 
-## Etape 5:Django :
-
-- **Installer** :django : pip install django
-
-## Etape 6: Mettre les migrations de la base de données
+## Etape 5: Mettre les migrations de la base de données
 
     python manage.py makemigrations
    
     python manage.py migrate
 
-## Etape 7: Créer un superutilisateur (admin)
+## Etape 6: Créer un superutilisateur (admin)
  
     python manage.py createsuperuser
 
-## Etape 8: Lancer le serveur de développement
+## Etape 7: Lancer le serveur de développement
 
     python manage.py runserver
 
-## Etape 9: Accéder à l'application dans le navigateur
+## Etape 8: Accéder à l'application dans le navigateur
 
    http://127.0.0.1:8000/
 
