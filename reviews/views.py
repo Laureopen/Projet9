@@ -13,16 +13,32 @@ from .models import Ticket, UserFollows, Review
 
 @login_required
 def my_ticket_list(request):
+    """
+        Affiche la liste des tickets créés ou critiqués par l'utilisateur connecté.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page HTML contenant la liste des tickets.
+    """
     tickets = Ticket.objects.filter(Q(user=request.user)|Q(review__user=request.user)).order_by('-time_created')
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 @login_required
 def flux(request):
-    # Récupérer les IDs des utilisateurs suivis
+    """
+        Affiche la liste des tickets de l'utilisateur et de ses abonnements.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page HTML contenant la liste des tickets dans le flux.
+    """
     followed_users_ids = (UserFollows.objects.filter(user=request.user,is_blocked=False).values_list
                           ('followed_user_id', flat=True))
 
-    # Tickets de moi + des gens que je suis
     tickets = Ticket.objects.filter(
         Q(user=request.user) | Q(user__in=followed_users_ids)
     ).order_by('-time_created')
@@ -31,12 +47,33 @@ def flux(request):
 
 
 def subscriptions_ticket_list(request):
+    """
+        Affiche tous les tickets existants (pour tests/débogage).
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page HTML contenant tous les tickets.
+    """
     tickets = Ticket.objects.all()
     return render(request, 'reviews/ticket_list_flux.html', {'tickets': tickets})
 
 
 @login_required
 def create_ticket(request):
+    """
+        Crée un nouveau ticket, avec optionnellement une critique associée.
+
+        Si la méthode est POST, traite et sauvegarde le ticket et la critique (si présente),
+        puis redirige vers le flux.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page de création de ticket (GET) ou redirection après création (POST).
+    """
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, request.FILES)
         review_form = ReviewForm(request.POST)
@@ -65,6 +102,16 @@ def create_ticket(request):
 
 @login_required
 def edit_ticket(request, ticket_id):
+    """
+       Permet à l'utilisateur connecté de modifier un de ses tickets.
+
+       Args:
+           request (HttpRequest): La requête HTTP reçue.
+           ticket_id (int): ID du ticket à modifier.
+
+       Returns:
+           HttpResponse: La page d'édition du ticket (GET) ou redirection après modification (POST).
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == 'POST':
@@ -83,6 +130,16 @@ def edit_ticket(request, ticket_id):
 
 @login_required
 def delete_ticket(request, ticket_id):
+    """
+        Permet à l'utilisateur connecté de supprimer un de ses tickets.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+            ticket_id (int): ID du ticket à supprimer.
+
+        Returns:
+            HttpResponse: La page de confirmation ou redirection après suppression.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
 
     if request.method == 'POST':
@@ -95,6 +152,16 @@ def delete_ticket(request, ticket_id):
 
 @login_required
 def edit_review(request, review_id):
+    """
+       Permet à l'utilisateur connecté de modifier une de ses critiques.
+
+       Args:
+           request (HttpRequest): La requête HTTP reçue.
+           review_id (int): ID de la critique à modifier.
+
+       Returns:
+           HttpResponse: La page d'édition ou redirection après modification.
+    """
     # Récupérer la review avec l'ID, et la lier à l'utilisateur connecté
     review = get_object_or_404(Review, id=review_id, user=request.user)
 
@@ -116,6 +183,16 @@ def edit_review(request, review_id):
 @login_required
 @csrf_exempt
 def create_review_for_ticket(request, ticket_id):
+    """
+       Crée une critique pour un ticket donné (via AJAX ou formulaire classique).
+
+       Args:
+           request (HttpRequest): La requête HTTP reçue.
+           ticket_id (int): ID du ticket à critiquer.
+
+       Returns:
+           JsonResponse ou HttpResponse: Réponse JSON si AJAX, ou redirection/page HTML sinon.
+    """
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
     if request.method == 'POST':
@@ -150,6 +227,20 @@ def create_review_for_ticket(request, ticket_id):
 
 @login_required
 def subscriptions(request):
+    """
+        Gère les abonnements et le blocage d'utilisateurs.
+
+        Permet de :
+        - S'abonner à un utilisateur par son nom.
+        - Se désabonner.
+        - Bloquer/débloquer un utilisateur.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page des abonnements.
+    """
     if request.method == 'POST':
         if 'unfollow_id' in request.POST:
             user_id = request.POST.get('unfollow_id')
@@ -201,6 +292,16 @@ def subscriptions(request):
 
 @login_required
 def delete_review(request, review_id):
+    """
+        Permet à l'utilisateur connecté de supprimer une de ses critiques.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+            review_id (int): ID de la critique à supprimer.
+
+        Returns:
+            HttpResponse: La page de confirmation ou redirection après suppression.
+    """
     review = get_object_or_404(Review, id=review_id, user=request.user)
 
     if request.method == 'POST':
@@ -213,6 +314,15 @@ def delete_review(request, review_id):
 
 
 def create_ticket_only(request):
+    """
+        Crée uniquement un ticket, sans critique associée.
+
+        Args:
+            request (HttpRequest): La requête HTTP reçue.
+
+        Returns:
+            HttpResponse: La page de création du ticket ou redirection après création.
+    """
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, request.FILES)
         if ticket_form.is_valid():
@@ -228,6 +338,15 @@ def create_ticket_only(request):
 
 
 def register(request):
+    """
+       Permet à un nouvel utilisateur de créer un compte.
+
+       Args:
+           request (HttpRequest): La requête HTTP reçue.
+
+       Returns:
+           HttpResponse: La page d'inscription ou redirection vers la page de connexion après inscription.
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

@@ -5,9 +5,10 @@ from django.db.models import Q
 
 class Ticket(models.Model):
     """
-    Represents a ticket created by a user. A ticket includes a title,
-    an optional description, an optional image, and a timestamp indicating
-    when it was created. Each ticket is linked to the user who created it.
+        Représente un ticket créé par un utilisateur. Un ticket comprend un titre,
+        une description optionnelle, une image optionnelle, ainsi qu'un horodatage
+        indiquant la date de création. Chaque ticket est associé à l'utilisateur
+        qui l'a créé.
     """
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=2048, blank=True)
@@ -16,23 +17,47 @@ class Ticket(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+            Retourne une représentation lisible du ticket, combinant le titre et l'utilisateur.
+        """
         return f"{self.title} - {self.user}"
 
     def ordered_review_set(self):
-        # Affiche les utilisateurs qui suivent l'utilisateur courant
+        """
+            Récupère les critiques liées à ce ticket, ordonnées par date de création décroissante,
+            en filtrant uniquement celles écrites par les utilisateurs qui suivent l'auteur du ticket
+            sans être bloqués, ou par l'auteur lui-même.
+
+            Retourne :
+                QuerySet : Liste filtrée et ordonnée des critiques liées au ticket.
+        """
+
         followers_not_blocked = self.user.followers.filter(is_blocked=False).values_list('user', flat=True)
-        # Filtrer les critiques où l'auteur fait partie des followers non bloqués
-        # et où le ticket appartient à l'utilisateur courant
+
         return self.review_set.filter(
             Q(user__in=followers_not_blocked) | Q(user=self.user),
-            ticket__user=self.user  # Le ticket doit être créé par l'utilisateur courant
-        ).order_by('-time_created')  # Tri des critiques de la plus récente à la plus ancienne
+            ticket__user=self.user
+        ).order_by('-time_created')
 
 
 class Review(models.Model):
+    """
+        Représente une critique associée à un ticket.
+
+        Une critique comprend une note (entre 0 et 5), un titre, un corps optionnel,
+        une référence à l'utilisateur qui a écrit la critique, ainsi qu'un horodatage
+        indiquant la date de création.
+
+        Attributs :
+            ticket (ForeignKey) : Le ticket concerné par la critique.
+            rating (PositiveSmallIntegerField) : Note attribuée, de 0 à 5 inclus.
+            headline (CharField) : Titre de la critique.
+            body (CharField) : Texte de la critique (optionnel).
+            user (ForeignKey) : Utilisateur auteur de la critique.
+            time_created (DateTimeField) : Date et heure de création de la critique.
+    """
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(
-        # validates that rating must be between 0 and 5
         validators=[MinValueValidator(0), MaxValueValidator(5)])
     headline = models.CharField(max_length=128)
     body = models.CharField(max_length=8192, blank=True)
@@ -42,6 +67,20 @@ class Review(models.Model):
 
 
 class UserFollows(models.Model):
+    """
+        Modèle représentant la relation de suivi entre deux utilisateurs.
+
+        Permet à un utilisateur de suivre un autre utilisateur. La relation peut être
+        bloquée (is_blocked) pour empêcher certaines interactions.
+
+        Attributs :
+            user (ForeignKey) : Utilisateur qui suit.
+            followed_user (ForeignKey) : Utilisateur suivi.
+            is_blocked (BooleanField) : Indique si le suivi est bloqué.
+
+        Contraintes :
+            unique_together : Empêche qu'un utilisateur suive plusieurs fois le même utilisateur.
+    """
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         related_name='following',

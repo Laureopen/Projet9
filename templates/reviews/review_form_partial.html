@@ -49,6 +49,7 @@
 }
 </style>
 <script>
+    /* Ferme le formulaire plein écran lorsque l'utilisateur clique sur le bouton "×" */
 $('#close-fullscreen-form').on('click', function () {
     $('.fullscreen-form').fadeOut();
 });
@@ -62,14 +63,18 @@ $('#close-fullscreen-form').on('click', function () {
         {% if ticket.image %}
             <img src="{{ ticket.image.url }}" alt="Image du ticket" class="m-4" style="max-width: 200px;">
         {% endif %}
-        <form method="post" class="ajax-review-form border border-dark rounded p-3 mb-2" action="{% url 'create-review-for-ticket' ticket.id %}">
+        <!-- Formulaire pour créer une critique -->
+        <form method="post" class="ajax-review-form border border-dark rounded p-3 mb-2"
+              action="{% url 'create-review-for-ticket' ticket.id %}">
         {% csrf_token %}
         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
         <h1>Critique </h1>
+            <!-- Champ du titre de la critique -->
         <div>
             <label for="id_headline">Titre :</label>
             {{ review_form.headline }}
         </div>
+            <!-- Sélecteur de note (étoiles) -->
         <div>
     <label>Note :</label>
     <input type="hidden" name="rating" value="0" id="rating-value">
